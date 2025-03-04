@@ -3,13 +3,7 @@
     padding: 0;
     box-sizing: border-box;
 }
-@font-face {
-    font-family: 'Tidla Sans';
-    src: url('./fonts/TildaSans-VF_TTF_Web/TildaSans-VF.woff2') format('woff2'),
-        url('./fonts/TildaSans-VF_TTF_Web/TildaSans-VF.woff') format('woff'),
-        url('./fonts/TildaSans-VF_TTF_Web/TildaSans-VF.ttf') format('ttf');
-    font-style: normal;
-}
 body {
-    font-family: 'Tilda Sans', sans-serif;
+    font-family: 'Tilda Sans';
+    overflow: hidden;
 }

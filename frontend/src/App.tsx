@@ -4,7 +4,9 @@ import './App.scss';
 
 const App: FC = () => {
   return (
-    <MainPage />
+    <>
+      <MainPage />
+    </>
   );
 }
 
