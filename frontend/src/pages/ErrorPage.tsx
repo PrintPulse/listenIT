@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { DataProvider } from '../context/DataContext';
 import Circles from '../components/layout/Circles';
 import { Link } from 'react-router-dom';
 
-const ErrorPage = () => {
+const ErrorPage: FC = () => {
   return (
     <DataProvider>
         <Circles />

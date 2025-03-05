@@ -17,7 +17,7 @@ const Casette: FC = () => {
 
     return (
         <>{isBgYellow}
-            <main className='main'>
+            <main className='main' test-dataid='main'>
                 <div className="main__top">
                     <h2 className="main__title">listen!</h2>
                 </div>

@@ -45,9 +45,15 @@ const Circles: FC = () => {
     }, [])
 
     return (
-        <div className={`circle-container ${isBgYellow ? 'circle-container--yellow' : 'circle-container--green'}`}>
+        <div 
+            data-testid="circle-container"
+            className={`circle-container ${isBgYellow ? 'circle-container--yellow' : 'circle-container--green'}`}
+        >
             {elements.map((el, index) => (
-                <div key={el.id} className={`circle circle--${index} ${isBgYellow ? 'circle--yellow' : 'circle--green'}`} 
+                <div 
+                    key={el.id}
+                    data-testid='circle'
+                    className={`circle circle--${index} ${isBgYellow ? 'circle--yellow' : 'circle--green'}`} 
                     style={{
                         top: fixedPositions[index].top,
                         left: fixedPositions[index].left,
