@@ -36,7 +36,11 @@ const Casette: FC = () => {
                                 onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setCurrInput(e.target.value) }
                                 type="text" name="url" id='url' className='main__input' title='Нажмите Enter для поиска' placeholder=' '
                             />
-                            <label htmlFor="url" className="main__label">Вставьте url-ссылку на радио...</label>
+                            <label htmlFor="url" 
+                                className={`main__label ${currInput ? 'invisible' : ''} ${currInput ? '' : 'transparent'}`}
+                            >
+                                Вставьте url-ссылку на радио...
+                            </label>
                         </div>
                         <button className="main__button main__button--next" aria-label='next' title='Следующий'
                             onClick={() => {

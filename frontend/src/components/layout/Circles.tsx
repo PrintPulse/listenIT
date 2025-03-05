@@ -4,7 +4,6 @@ import './Circles.scss';
 
 interface elementsProps {
     id: number;
-    // size: number;
 };
 interface positionTypes {
     top: number;
@@ -21,7 +20,6 @@ const Circles: FC = () => {
     useEffect(() => {
         let widthDiff = 1728 / windowWidth;
         let heightDiff = 1117 / windowHeight;
-        console.log(heightDiff)
 
         setFixedPositions([{ top: -(198 / heightDiff), left: -(155 / widthDiff) }, { top: 542 / heightDiff, left: 897 / widthDiff }, { top: 635 / heightDiff, left: 111 / widthDiff }, { top: 17 / heightDiff, left: 1350 / widthDiff }]);
     }, [windowWidth, windowHeight])
