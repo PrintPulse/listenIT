@@ -1,0 +1,88 @@
+$yellow-input-bg: #F9F4D2;
+$gray-input-border: #C2C2C2;
+$gray-text: #949494;
+
+.main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    gap: 14.2303dvh;
+    position: absolute;
+    top: 8.7%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    &__bottom {
+        width: 100%;
+        max-width: 640px;
+        position: relative;
+    }
+    &__inner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 11px;
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        transform: translateY(-50%) translateX(-50%);
+    }
+    &__title {
+        font-size: 8.25rem;
+    }
+    &__image {
+        width: 100%;
+        height: 100%;
+        max-width: 640px;
+        max-height: 407px;
+    }
+    &__input {
+        border: 1px solid $gray-input-border;
+        border-radius: 50px;
+        background-color: $yellow-input-bg;
+        font-size: 1.75rem;
+        padding: 0 18px 0 31px;
+        width: 59.375dvw;
+        height: 105px;
+        max-width: 380px;
+
+        &-container {
+            position: relative;
+        }
+        &:focus {
+            outline: none;
+        }
+    }
+    &__label {
+        font-size: 1.6rem;
+        color: $gray-text;
+        position: absolute;
+        top: 50%;
+        left: 31px;
+        transform: translateY(-50%);
+        transition: all 0.3s ease;
+
+        &.transparent {
+            opacity: 0.7;
+        }
+        &.invisible {
+            display: none;
+        }
+    }
+    &__button {
+        background: url('../../images/arrow-left.png') no-repeat center center;
+        background-size: cover;
+        border: 0;
+        width: 100dvw;
+        max-width: 74px;
+        height: 52px;
+
+        &--next {
+            transform: rotateY(180deg);
+        }
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
