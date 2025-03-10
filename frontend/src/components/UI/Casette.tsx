@@ -1,11 +1,16 @@
-import React, { FC, useState } from 'react';
-import { useDataContext } from '../../context/DataContext';
+import React, { FC, useState, useContext } from 'react';
+import { BackgroundContext } from '../../context/BackgroundContext';
 import audocassete from '../../images/audiocassete.png';
 import './Casette.scss';
 
 const Casette: FC = () => {
     const [currInput, setCurrInput] = useState<string>('');
-    const { isBgYellow, setIsBgYellow } = useDataContext();
+    const bgContext = useContext(BackgroundContext);
+    
+    if (!bgContext) {
+        throw new Error('casette must be used within a BackgroundProvider');
+    }
+    const { setIsBgYellow } = bgContext;
 
     const prevBtnClickHandle = () => {
 
@@ -16,7 +21,7 @@ const Casette: FC = () => {
     };
 
     return (
-        <>{isBgYellow}
+        <>
             <main className='main' test-dataid='main'>
                 <div className="main__top">
                     <h2 className="main__title">listen!</h2>

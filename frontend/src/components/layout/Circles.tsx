@@ -1,5 +1,5 @@
-import React, { FC, useState, useEffect } from 'react';
-import { useDataContext } from '../../context/DataContext';
+import React, { FC, useState, useEffect, useContext } from 'react';
+import { BackgroundContext } from '../../context/BackgroundContext';
 import './Circles.scss';
 
 interface elementsProps {
@@ -15,7 +15,14 @@ const Circles: FC = () => {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [windowHeight, setWindowHeight] = useState(window.innerHeight);
     const [fixedPositions, setFixedPositions] = useState<positionTypes[]>([]);
-    const { isBgYellow } = useDataContext();
+
+    const bgContext = useContext(BackgroundContext);
+
+    if (!bgContext) {
+        throw new Error('circles must be used within a BackgroundProvider');
+    }
+
+    const { isBgYellow } = bgContext;
 
     useEffect(() => {
         let widthDiff = 1728 / windowWidth;
@@ -41,7 +48,6 @@ const Circles: FC = () => {
         return () => {
             window.removeEventListener('resize', handleResize);
         }
-
     }, [])
 
     return (
