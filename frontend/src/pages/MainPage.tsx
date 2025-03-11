@@ -7,6 +7,7 @@ import { StationList } from '../components/UI/StationList';
 import type { RadioStation, RadioState } from '../types';
 import { AuthContext } from '../context/AuthContext';
 import { isUserAuthed } from '../services/authService';
+import AuthModal from '../components/UI/AuthModal';
 
 const MainPage: FC = () => {
   const currAuthContext = useContext(AuthContext) || { isAuthed: false};
@@ -99,6 +100,9 @@ const MainPage: FC = () => {
           onVolumeChange={(volume) => setRadioState(prev => ({ ...prev, volume }))}
         />
         <Casette />
+        {!isAuthed &&
+          <AuthModal />
+        }
     </>
   )
 }
