@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react';
+import React, { FC, FormEvent, useState } from 'react';
+import { loginUser, registerUser, resetPassStep1, resetPassStep2 } from '../../services/authService';
 import './AuthModal.scss';
 
 type AuthStep = {
@@ -17,6 +18,9 @@ const authSteps: AuthStep[] = [
 
 const AuthModal: FC = () => {
     const [currStepIndex, setCurrStepIndex] = useState<number>(0);
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const currStep = authSteps[currStepIndex];
 
     const handleSwitchStep = () => {
@@ -28,11 +32,57 @@ const AuthModal: FC = () => {
             setCurrStepIndex(1);
         }
     };
+
+    const handleSubmint = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsLoading(true);
+        
+        if (currStepIndex === 0) { //регистрация
+
+            const response: boolean = await registerUser(email, password);
+
+            if (response) {
+                setIsLoading(false);
+            }
+        }
+        else if (currStepIndex === 1) { //авторизация
+            const token: string = await loginUser(email, password);
+
+            if (token) {
+                localStorage.setItem('token', token);
+                setIsLoading(false);
+            }
+        }
+        else if (currStepIndex === 2) {//сброс 1
+            const response: boolean = await resetPassStep1(email);
+
+            if (response) {
+                setIsLoading(false);
+                setCurrStepIndex(3);
+            }
+        }
+        else if (currStepIndex === 3) {//сброс 2
+            const token = localStorage.getItem('token-reset');
+
+            if (token) {
+                const response: boolean = await resetPassStep2(token, email);
+
+                if (response) {
+                    setIsLoading(false);
+                    setCurrStepIndex(3);
+                }
+            }
+            else {
+                throw new Error('ошибка, пользователь пропустил этап сброса пароля');
+            }
+        }
+    };
+
     return (
         <div className='auth-modal'>
             <div className="auth-modal__inner">
                 <h3 className="auth-modal__title">{currStep.title}</h3>
-                <form className="auth-modal__form">
+                <form onSubmit={ handleSubmint } className="auth-modal__form">
                     {currStep.inputs.map((input, index) => (
                         <input
                             key={index}
@@ -40,13 +90,21 @@ const AuthModal: FC = () => {
                             className={`auth-modal__input auth-modal__input--${input.type}`}
                             placeholder={input.placeholder}
                             autoComplete='off'
+                            value={input.type === 'email' ? email : password}
+                            onChange={(e) => {
+                                if (input.type === 'email') setEmail(e.target.value);
+                                else setPassword(e.target.value);
+                            }}
                         />
                     ))}
                     <button className="auth-modal__button--submit" type='submit'>
                         {currStep.buttonText}
                     </button>
+                    {isLoading && 
+                        <p>Загрузка...</p>
+                    }
                     {currStepIndex === 1 &&
-                        <button onClick={ () => setCurrStepIndex(2) }className="auth-modal__button--reset">Забыли пароль? Восстановить пароль</button>
+                        <button onClick={ () => setCurrStepIndex(2) } type='submit' className="auth-modal__button--reset">Забыли пароль? Восстановить пароль</button>
                     }
                 </form>
                 <button className="auth-modal__button--switch" onClick={ handleSwitchStep }>
