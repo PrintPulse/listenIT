@@ -99,7 +99,7 @@ const resetPassStep1 = async (email: string) => {
             }
         );
         
-        return response.data;
+        return response.data.token;
     }
     catch (error) {
         const axiosError = error as AxiosError;

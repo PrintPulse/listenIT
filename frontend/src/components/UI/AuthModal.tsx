@@ -1,4 +1,5 @@
-import React, { FC, FormEvent, useState } from 'react';
+import React, { FC, FormEvent, useState, useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
 import { loginUser, registerUser, resetPassStep1, resetPassStep2 } from '../../services/authService';
 import './AuthModal.scss';
 
@@ -17,10 +18,11 @@ const authSteps: AuthStep[] = [
 ];
 
 const AuthModal: FC = () => {
-    const [currStepIndex, setCurrStepIndex] = useState<number>(0);
+    const { setIsAuthed } = useContext(AuthContext) || { setIsAuthed: () => {} };    const [currStepIndex, setCurrStepIndex] = useState<number>(0);
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
+
     const currStep = authSteps[currStepIndex];
 
     const handleSwitchStep = () => {
@@ -37,44 +39,51 @@ const AuthModal: FC = () => {
         e.preventDefault();
         setIsLoading(true);
         
-        if (currStepIndex === 0) { //регистрация
-
-            const response: boolean = await registerUser(email, password);
-
-            if (response) {
-                setIsLoading(false);
+        try {
+            if (currStepIndex === 0) { //регистрация
+                const response: boolean = await registerUser(email, password);
+    
+                if (response) {
+                    setIsLoading(false);
+                }
             }
-        }
-        else if (currStepIndex === 1) { //авторизация
-            const token: string = await loginUser(email, password);
-
-            if (token) {
-                localStorage.setItem('token', token);
-                setIsLoading(false);
+            else if (currStepIndex === 1) { //авторизация
+                const token: string = await loginUser(email, password);
+    
+                if (token) {
+                    localStorage.setItem('token', token);
+                    setIsLoading(false);
+                    setIsAuthed(true);
+                }
             }
-        }
-        else if (currStepIndex === 2) {//сброс 1
-            const response: boolean = await resetPassStep1(email);
-
-            if (response) {
-                setIsLoading(false);
-                setCurrStepIndex(3);
-            }
-        }
-        else if (currStepIndex === 3) {//сброс 2
-            const token = localStorage.getItem('token-reset');
-
-            if (token) {
-                const response: boolean = await resetPassStep2(token, email);
-
+            else if (currStepIndex === 2) {//сброс 1
+                const response: string = await resetPassStep1(email);
+    
                 if (response) {
                     setIsLoading(false);
                     setCurrStepIndex(3);
+                    localStorage.setItem('token-reset', response);
                 }
             }
-            else {
-                throw new Error('ошибка, пользователь пропустил этап сброса пароля');
+            else if (currStepIndex === 3) {//сброс 2
+                const tokenReset = localStorage.getItem('token-reset');
+    
+                if (tokenReset) {
+                    const response: boolean = await resetPassStep2(tokenReset, email);
+    
+                    if (response) {
+                        setIsLoading(false);
+                        setCurrStepIndex(3);
+                    }
+                }
+                else {
+                    throw new Error('ошибка, пользователь пропустил этап сброса пароля');
+                }
             }
+        }
+        catch (err) {
+            setIsLoading(false);
+            throw new Error('произошла ошибка');
         }
     };
 
