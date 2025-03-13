@@ -1,0 +1,75 @@
+$gray-modal-border: #4A4A4A;
+$biege-modal-bg: #e4d9b7;
+
+.auth-modal {
+    border: 1px solid $gray-modal-border;
+    border-radius: 16px;
+    background-color: $biege-modal-bg;
+    width: 50dvw;
+    height: 50dvh;
+    min-width: 350px;
+    max-width: 550px;
+    max-height: 350px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    &__inner {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        padding: 3%;
+        height: 100%;
+    }
+    &__title {
+        font-size: 3.25rem;
+        text-align: center;
+    }
+    &__form {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        width: 100%;
+        flex-grow: 1;
+        position: relative;
+        top: 0;
+    }
+    &__input {
+        border: 1px solid $gray-modal-border;
+        border-radius: 16px;
+        font-size: 1.15rem;
+        width: 90%;
+        height: 50px;
+        max-width: 300px;
+        padding: 0 12.5px;
+    }
+    &__button {
+        &--submit {
+            font-size: 1rem;
+            font-weight: 600;
+            border: 1px solid $gray-modal-border;
+            background-color: #b8936f;
+            border-radius: 15px;
+            width: 80%;
+            height: 40px;
+            max-width: 225px;
+            cursor: pointer;
+        }
+        &--switch {
+            border: 0;
+            background-color: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        &--reset {
+            border: 0;
+            background-color: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;  
+        }
+    }
+}
