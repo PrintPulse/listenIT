@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, useState, useContext } from 'react';
+import { FC, FormEvent, useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { loginUser, registerUser, resetPassStep1, resetPassStep2 } from '../../services/authService';
 import './AuthModal.scss';
@@ -37,6 +37,7 @@ const AuthModal: FC = () => {
 
     const handleSubmint = async (e: FormEvent<HTMLFormElement>) => {
         setIsLoading(true);
+        e.preventDefault();
         
         try {
             if (currStepIndex === 0) { //регистрация
