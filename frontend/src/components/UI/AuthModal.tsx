@@ -22,6 +22,8 @@ const AuthModal: FC = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isErrorResponse, setIsErrorResponse] = useState<boolean | null>(null);
+    const [errorResponseInfo, setErrorResponseInfo] = useState(null);
 
     const currStep = authSteps[currStepIndex];
 
@@ -37,6 +39,7 @@ const AuthModal: FC = () => {
 
     const handleSubmint = async (e: FormEvent<HTMLFormElement>) => {
         setIsLoading(true);
+        e.preventDefault();
         
         try {
             if (currStepIndex === 0) { //регистрация
@@ -44,6 +47,7 @@ const AuthModal: FC = () => {
     
                 if (response) {
                     setIsLoading(false);
+                    setIsErrorResponse(false);
                 }
             }
             else if (currStepIndex === 1) { //авторизация
@@ -53,6 +57,7 @@ const AuthModal: FC = () => {
                     localStorage.setItem('token', token);
                     setIsLoading(false);
                     setIsAuthed(true);
+                    setIsErrorResponse(false);
                 }
             }
             else if (currStepIndex === 2) {//сброс 1
@@ -62,17 +67,23 @@ const AuthModal: FC = () => {
                     setIsLoading(false);
                     setCurrStepIndex(3);
                     localStorage.setItem('token-reset', response);
+                    setIsErrorResponse(false);
                 }
             }
             else if (currStepIndex === 3) {//сброс 2
                 const tokenReset = localStorage.getItem('token-reset');
     
                 if (tokenReset) {
-                    const response: boolean = await resetPassStep2(tokenReset, email);
+                    const response = await resetPassStep2(tokenReset, password);
     
+                    if (response?.details) {
+                        setIsLoading(false);
+                        setIsErrorResponse(true);
+                        setErrorResponseInfo(response.details);
+                    }
                     if (response) {
                         setIsLoading(false);
-                        setCurrStepIndex(3);
+                        setIsErrorResponse(false);
                     }
                 }
                 else {
@@ -110,6 +121,9 @@ const AuthModal: FC = () => {
                     </button>
                     {isLoading && 
                         <p>Загрузка...</p>
+                    }
+                    {isErrorResponse &&
+                        <p>{errorResponseInfo}</p>
                     }
                     {currStepIndex === 1 &&
                         <button onClick={ () => setCurrStepIndex(2) } type='submit' className="auth-modal__button--reset">Забыли пароль? Восстановить пароль</button>
