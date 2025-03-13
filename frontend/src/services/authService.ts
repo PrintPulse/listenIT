@@ -1,5 +1,9 @@
 import axios, { AxiosError } from 'axios';
 
+interface ErrorResponse {
+    detail?: string;
+}
+
 const isUserAuthed = async (token: string): Promise<boolean> => {
     try {
         const response = await axios.get('http://localhost:8000/users/me', {
@@ -128,9 +132,10 @@ const resetPassStep2 = async (token: string, password: string) => {
         const axiosError = error as AxiosError;
         
         if (axiosError.response) {
-            throw new Error(`ошибка: ${error}`);
+            const errorData = axiosError.response.data as ErrorResponse;
+            return errorData.detail || `ошибка ${error}`;
         } 
-        throw new Error(axiosError.message);
+        return axiosError.message || `ошибка ${error}`;
     }
 };
 

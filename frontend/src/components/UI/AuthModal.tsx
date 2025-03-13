@@ -36,7 +36,6 @@ const AuthModal: FC = () => {
     };
 
     const handleSubmint = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
         setIsLoading(true);
         
         try {
