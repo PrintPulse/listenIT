@@ -3,6 +3,10 @@ import { AuthContext } from '../../context/AuthContext';
 import { loginUser, registerUser, resetPassStep1, resetPassStep2 } from '../../services/authService';
 import './AuthModal.scss';
 
+type AuthModalProps = {
+    onSuccess: () => void;
+};
+
 type AuthStep = {
     title: string;
     inputs: { type: string; placeholder: string }[];
@@ -17,7 +21,7 @@ const authSteps: AuthStep[] = [
     { title: 'Сброс пароля', inputs: [{ type: 'password', placeholder: 'Новый пароль' }], buttonText: 'Сбросить пароль', switchText: 'Вспомнили пароль? Войти в систему' }
 ];
 
-const AuthModal: FC = () => {
+const AuthModal: FC<AuthModalProps> = ({ onSuccess }) => {
     const { setIsAuthed } = useContext(AuthContext) || { setIsAuthed: () => {} };    
     const [currStepIndex, setCurrStepIndex] = useState<number>(0);
     const [email, setEmail] = useState<string>('');
@@ -65,6 +69,7 @@ const AuthModal: FC = () => {
                     localStorage.setItem('token', response.access_token);
                     setIsAuthed(true);
                     setIsSuccessAction('Вы успешно авторизованы');
+                    onSuccess();
                 }
                 else if (response?.error) {
                     setErrorResponseInfo(response.error);

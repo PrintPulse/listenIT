@@ -12,6 +12,7 @@ import AuthModal from '../components/UI/AuthModal';
 const MainPage: FC = () => {
   const currAuthContext = useContext(AuthContext) || { isAuthed: false};
   const [isAuthed, setIsAuthed] = useState<boolean>(currAuthContext.isAuthed);
+  const [isAuthModalOpen, setAuthModalOpen] = useState<boolean>(!isAuthed);
   const [radioState, setRadioState] = useState<RadioState>({
     currentStation: null,
     stations: [],
@@ -68,6 +69,10 @@ const MainPage: FC = () => {
       setIsAuthed(false);
     }
   };
+
+  const handleAuthSuccess = () => {
+    setAuthModalOpen(false);
+  };
   
   return (
     <>
@@ -100,8 +105,8 @@ const MainPage: FC = () => {
           onVolumeChange={(volume) => setRadioState(prev => ({ ...prev, volume }))}
         />
         <Casette />
-        {!isAuthed &&
-          <AuthModal />
+        {!isAuthed && isAuthModalOpen &&
+          <AuthModal onSuccess={handleAuthSuccess} />
         }
     </>
   )
