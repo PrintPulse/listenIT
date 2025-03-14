@@ -18,62 +18,82 @@ const authSteps: AuthStep[] = [
 ];
 
 const AuthModal: FC = () => {
-    const { setIsAuthed } = useContext(AuthContext) || { setIsAuthed: () => {} };    const [currStepIndex, setCurrStepIndex] = useState<number>(0);
+    const { setIsAuthed } = useContext(AuthContext) || { setIsAuthed: () => {} };    
+    const [currStepIndex, setCurrStepIndex] = useState<number>(0);
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [errorResponseInfo, setErrorResponseInfo] = useState<string | null>(null);
+    const [isSuccessAction, setIsSuccessAction] = useState<string>('');
 
     const currStep = authSteps[currStepIndex];
 
     const handleSwitchStep = () => {
         if (currStepIndex === 0) {
             setCurrStepIndex(1);
-        } else if (currStepIndex === 1) {
+        } 
+        else if (currStepIndex === 1) {
             setCurrStepIndex(0);
-        } else if (currStepIndex === 2) {
+        } 
+        else if (currStepIndex === 2) {
             setCurrStepIndex(1);
         }
     };
 
-    const handleSubmint = async (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true);
+        setIsSuccessAction('');
+        setErrorResponseInfo(null);
         
         try {
+            let response;
             if (currStepIndex === 0) { //регистрация
-                const response: boolean = await registerUser(email, password);
+                response = await registerUser(email, password);
     
-                if (response) {
-                    setIsLoading(false);
+                if (response?.is_active) {
+                    setIsSuccessAction('Вы успешно зарегистрированы, войдите в аккаунт');
+                }
+                else if (response?.error) {
+                    setErrorResponseInfo(response.error);
                 }
             }
             else if (currStepIndex === 1) { //авторизация
-                const token: string = await loginUser(email, password);
+                response = await loginUser(email, password);
     
-                if (token) {
-                    localStorage.setItem('token', token);
-                    setIsLoading(false);
+                if (response?.access_token) {
+                    localStorage.setItem('token', response.access_token);
                     setIsAuthed(true);
+                    setIsSuccessAction('Вы успешно авторизованы');
+                }
+                else if (response?.error) {
+                    setErrorResponseInfo(response.error);
                 }
             }
             else if (currStepIndex === 2) {//сброс 1
-                const response: string = await resetPassStep1(email);
+                response = await resetPassStep1(email);
     
-                if (response) {
-                    setIsLoading(false);
+                if (response?.token) {
                     setCurrStepIndex(3);
-                    localStorage.setItem('token-reset', response);
+                    localStorage.setItem('token-reset', response.token);
+                    setIsSuccessAction('Успех, перейдите к следующему этапу');
+                }
+                else if (response?.error) {
+                    setErrorResponseInfo(response.error);
                 }
             }
             else if (currStepIndex === 3) {//сброс 2
                 const tokenReset = localStorage.getItem('token-reset');
-    
+
                 if (tokenReset) {
-                    const response: boolean = await resetPassStep2(tokenReset, email);
-    
-                    if (response) {
-                        setIsLoading(false);
-                        setCurrStepIndex(3);
+                    const response = await resetPassStep2(tokenReset, password);
+
+                    if (Object.keys(response).length === 0) {
+                        setIsSuccessAction('Ваш пароль успешно обновлён');
+                        localStorage.removeItem('token-reset');
+                    }
+                    else if (response?.details) {
+                        setErrorResponseInfo(response.details);
                     }
                 }
                 else {
@@ -82,8 +102,10 @@ const AuthModal: FC = () => {
             }
         }
         catch (err) {
-            setIsLoading(false);
             throw new Error('произошла ошибка');
+        }
+        finally {
+            setIsLoading(false);
         }
     };
 
@@ -91,7 +113,7 @@ const AuthModal: FC = () => {
         <div className='auth-modal'>
             <div className="auth-modal__inner">
                 <h3 className="auth-modal__title">{currStep.title}</h3>
-                <form onSubmit={ handleSubmint } className="auth-modal__form">
+                <form onSubmit={ handleSubmit } className="auth-modal__form">
                     {currStep.inputs.map((input, index) => (
                         <input
                             key={index}
@@ -111,6 +133,12 @@ const AuthModal: FC = () => {
                     </button>
                     {isLoading && 
                         <p>Загрузка...</p>
+                    }
+                    {errorResponseInfo &&
+                        <p>{errorResponseInfo}</p>
+                    }
+                    {isSuccessAction &&
+                        <p>{isSuccessAction}</p>
                     }
                     {currStepIndex === 1 &&
                         <button onClick={ () => setCurrStepIndex(2) } type='submit' className="auth-modal__button--reset">Забыли пароль? Восстановить пароль</button>
