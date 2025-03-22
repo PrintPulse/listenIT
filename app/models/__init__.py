@@ -1,1 +1,1 @@
-from .user import User  # noqa
+from .models import User, UserRadio, Radio  # noqa
