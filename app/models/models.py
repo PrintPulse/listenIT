@@ -18,8 +18,8 @@ class User(SQLAlchemyBaseUserTable, Base):
 
 
 class Radio(Base):
-    source = Column(String(250), unique=True, nullable=False)
     name = Column(String(100), unique=True, nullable=False)
+    source = Column(String(250), unique=True, nullable=False)
     users = relationship(
         "User", secondary="user_radio", back_populates="radios"
     )
