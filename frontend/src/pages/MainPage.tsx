@@ -8,6 +8,12 @@ import type { RadioStation, RadioState } from '../types';
 import { AuthContext } from '../context/AuthContext';
 import { isUserAuthed } from '../services/authService';
 import AuthModal from '../components/UI/AuthModal';
+import Queue from '../components/UI/Queue';
+
+interface IQueueState {
+   id: number;
+   url: string;
+};
 
 const MainPage: FC = () => {
    const currAuthContext = useContext(AuthContext) || { isAuthed: false};
@@ -19,6 +25,7 @@ const MainPage: FC = () => {
       isPlaying: false,
       volume: 0.5,
    });
+   const [queueState, setQueueState] = useState<IQueueState | null>(null);
 
    useEffect(() => {
       checkUserStatus();
@@ -61,9 +68,9 @@ const MainPage: FC = () => {
       const token = localStorage.getItem('token');
 
       if (token) {
-      isUserAuthed(token)
-         .then(() => setIsAuthed(true))
-         .catch(error => { setIsAuthed(false); throw new Error(`${error.messsage}`) })
+         isUserAuthed(token)
+            .then(() => setIsAuthed(true))
+            .catch(error => { setIsAuthed(false); throw new Error(`${error.messsage}`) })
       }
       else {
          setIsAuthed(false);
@@ -72,6 +79,10 @@ const MainPage: FC = () => {
 
    const handleAuthSuccess = () => {
       setAuthModalOpen(false);
+   };
+
+   const handleLinkChange = (link: string) => {
+      setQueueState({ id: Date.now(), url: link });
    };
 
    return (
@@ -94,10 +105,11 @@ const MainPage: FC = () => {
             )}
          </>
          <RadioPlayer station={radioState.currentStation} isPlaying={radioState.isPlaying} volume={radioState.volume} onPlayPause={ () => setRadioState(prev => ({ ...prev, isPlaying: !prev.isPlaying })) } onVolumeChange={ (volume) => setRadioState(prev => ({ ...prev, volume })) } />
-         <Casette />
+         <Casette onLinkChange={handleLinkChange}/>
          {!isAuthed && isAuthModalOpen &&
             <AuthModal onSuccess={handleAuthSuccess} />
          }
+         <Queue queueItem={queueState} />
       </>
    );
 };
