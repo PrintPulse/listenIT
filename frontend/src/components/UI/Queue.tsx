@@ -1,6 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
 import AudioPlayer from './AudioPlayer';
-import './Queue.scss';
 
 interface IQueueProps {
    queueItem: IQueueState | null; 
@@ -35,14 +34,14 @@ const Queue: FC<IQueueProps> = ({ queueItem }) => {
 
    return (
       <div className='queue'>
-         <ul className="queue__list">
+         {/* <ul className="queue__list">
          {queue.map((item, index) => (
             <li key={item.id} className='queue__item'>
                <p className="queue__item__placement">{index + 1}</p>
                <p className="queue__item__url">{item.url}</p>
             </li>
         ))}
-         </ul>
+         </ul> */}
          <div className='queue__curr-playing'>
             <h3 className='queue__title'>Сейчас играет:</h3>
             {currRadio ? (

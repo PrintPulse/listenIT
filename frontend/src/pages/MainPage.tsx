@@ -86,31 +86,16 @@ const MainPage: FC = () => {
    };
 
    return (
-      <>
+      <div className='container'>
          <Circles />
-         <div className='radio-import'>
-            <button onClick={handleImport} className="radio-import__button--import">
-               <Upload size={20} />
-               Import Stations
-            </button>
-         </div>
-         <>
-            {radioState.stations.length === 0 ? (
-               <div className="radio-empty">
-               <p className="radio-empty__text">No radio stations added yet</p>
-               <p className='radio-empty__text'>Import your stations using the button above</p>
-               </div>
-            ) : (
-               <StationList stations={radioState.stations} currentStation={radioState.currentStation} onSelectStation={handleSelectStation} />
-            )}
-         </>
          <RadioPlayer station={radioState.currentStation} isPlaying={radioState.isPlaying} volume={radioState.volume} onPlayPause={ () => setRadioState(prev => ({ ...prev, isPlaying: !prev.isPlaying })) } onVolumeChange={ (volume) => setRadioState(prev => ({ ...prev, volume })) } />
-         <Casette onLinkChange={handleLinkChange}/>
-         {!isAuthed && isAuthModalOpen &&
+         <Casette onLinkChange={handleLinkChange}>
+            <Queue queueItem={queueState} />
+         </Casette>
+         {isAuthed && isAuthModalOpen &&
             <AuthModal onSuccess={handleAuthSuccess} />
          }
-         <Queue queueItem={queueState} />
-      </>
+      </div>
    );
 };
 
