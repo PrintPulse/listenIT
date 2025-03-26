@@ -1,5 +1,4 @@
-import React, { FC, useState, useContext, ReactNode } from 'react';
-import { BackgroundContext } from '../../context/BackgroundContext';
+import React, { FC, useState, ReactNode } from 'react';
 import audocassete from '../../images/audiocassete.png';
 import './Casette.scss';
 
@@ -11,20 +10,6 @@ interface ICasetteProps {
 const Casette: FC<ICasetteProps> = ({ onLinkChange, children }) => {
    const [linkInput, setLinkInput] = useState<string>('');
    const [isFormVisible, setIsFormVisible] = useState<boolean>(true);
-   const bgContext = useContext(BackgroundContext);
-   
-   if (!bgContext) {
-      throw new Error('casette must be used within a BackgroundProvider');
-   }
-   const { setIsBgYellow } = bgContext;
-
-   const prevBtnClickHandle = () => {
-
-   };
-
-   const nextBtnClickHandle = () => {
-
-   };
 
    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -48,13 +33,6 @@ const Casette: FC<ICasetteProps> = ({ onLinkChange, children }) => {
             <div className="main__bottom">
                <img src={ audocassete } className="main__image" alt='vintage audio cassette tape' draggable={false}/>
                <div className="main__inner">
-                  <button className='main__button main__button--prev' aria-label='previous' title='Предыдущий'
-                     onClick={() => {
-                        prevBtnClickHandle();
-                        setIsBgYellow((prev: boolean) => !prev);
-                     }}
-                  >
-                  </button>
                   <div className="main__input-container">
                      {isFormVisible &&
                         <form onSubmit={ handleSubmit } className='main__form'>
@@ -72,13 +50,6 @@ const Casette: FC<ICasetteProps> = ({ onLinkChange, children }) => {
                   {!isFormVisible &&
                      children
                   }
-                  <button className="main__button main__button--next" aria-label='next' title='Следующий'
-                     onClick={() => {
-                        nextBtnClickHandle();
-                        setIsBgYellow((prev: boolean) => !prev);
-                     }}
-                  >
-                  </button>
                </div>
             </div>
          </main>
