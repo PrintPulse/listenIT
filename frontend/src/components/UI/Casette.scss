@@ -62,6 +62,7 @@ $gray-text: #949494;
         left: 31px;
         transform: translateY(-50%);
         transition: all 0.3s ease;
+        cursor: text;
 
         &.transparent {
             opacity: 0.7;
