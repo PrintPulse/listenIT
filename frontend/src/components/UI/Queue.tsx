@@ -6,6 +6,8 @@ interface IQueueProps {
    queueItem: IQueueState | null; 
    isPlaying: boolean;
    onPlayingChange: (isPlaying: boolean) => void;
+   currentTrack?: string;
+   onTrackChange: (track: string) => void;
 };
 
 interface IQueueState {
@@ -13,7 +15,7 @@ interface IQueueState {
    url: string;
 };
 
-const Queue: FC<IQueueProps> = ({ queueItem, isPlaying, onPlayingChange}) => {
+const Queue: FC<IQueueProps> = ({ queueItem, isPlaying, onPlayingChange, currentTrack, onTrackChange }) => {
    const [queue, setQueue] = useState<IQueueState[]>([]);
    const [currIndex, setCurrIndex] = useState<number>(-1);
    const bgContext = useContext(BackgroundContext);
@@ -28,7 +30,10 @@ const Queue: FC<IQueueProps> = ({ queueItem, isPlaying, onPlayingChange}) => {
       if (queueItem) {
          setQueue(prevVal => ([...prevVal, queueItem]));
 
-         if (currIndex === -1) setCurrIndex(0);
+         if (currIndex === -1) {
+            setCurrIndex(0);
+            onTrackChange(queueItem.url);
+         }
       }
    }, [queueItem]);
 

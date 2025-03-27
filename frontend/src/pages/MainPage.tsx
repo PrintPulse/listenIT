@@ -17,6 +17,7 @@ const MainPage: FC = () => {
    const [isAuthModalOpen, setAuthModalOpen] = useState<boolean>(!isAuthed);
    const [queueState, setQueueState] = useState<IQueueState | null>(null);
    const [isPlaying, setIsPlaying] = useState<boolean>(false);
+   const [currentTrack, setCurrentTrack] = useState<string>('');
 
    useEffect(() => {
       checkUserStatus();
@@ -46,8 +47,8 @@ const MainPage: FC = () => {
    return (
       <div className='container'>
          <Circles />
-         <Casette onLinkChange={handleLinkChange} isPlaying={isPlaying} onPlayingChange={setIsPlaying}>
-            <Queue queueItem={queueState} isPlaying={isPlaying} onPlayingChange={setIsPlaying} />
+         <Casette onLinkChange={handleLinkChange} isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack}>
+            <Queue queueItem={queueState} isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack} onTrackChange={setCurrentTrack}/>
          </Casette>
          {isAuthed && isAuthModalOpen &&
             <AuthModal onSuccess={handleAuthSuccess} />

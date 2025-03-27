@@ -48,10 +48,14 @@ const AudioPlayer: FC<IAudioPlayerProps> = ({ streamUrl, isPlaying, onPlayingCha
          <audio ref={audioRef} className="queue__curr-playing__audio"/>
          <div className="audio-controls">
             <button onClick={ () => onPlayingChange(!isPlaying) } className={`audio-controls__button audio-controls__button--${isPlaying ? 'pause' : 'play'}`} aria-label={`${isPlaying ? 'pause' : 'play'}`}></button>
-            <div className="audio-controls__volume-control">
+            <div 
+               className="audio-controls__volume-control"
+               style={{ '--rotation': volume * 180 - 90 } as React.CSSProperties}
+            >  
                <input className={'audio-controls__volume-input' + (volume === 0 ? ' muted' : '')} type="range" min="0" max="1" step="0.01" aria-label="Регулировка громкости"
                   onChange={(e) => setVolume(e.target.valueAsNumber)} value={volume}   
                />
+               <div className="audio-controls__marker"></div>
             </div>
          </div>
       </div>

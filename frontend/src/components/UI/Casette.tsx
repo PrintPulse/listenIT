@@ -7,11 +7,21 @@ interface ICasetteProps {
    children: ReactNode;
    isPlaying: boolean;
    onPlayingChange: (isPlaying: boolean) => void;
+   currentTrack?: string;
 };
 
-const Casette: FC<ICasetteProps> = ({ onLinkChange, children, isPlaying, onPlayingChange }) => {
+const Casette: FC<ICasetteProps> = ({ onLinkChange, children, isPlaying, onPlayingChange, currentTrack }) => {
    const [linkInput, setLinkInput] = useState<string>('');
    const [isFormVisible, setIsFormVisible] = useState<boolean>(true);
+
+   const getColorFromTrack = (track: string | undefined) => {
+      if (!track) return '#ffffff';
+      const hash = track.split('').reduce((acc, char) => char.charCodeAt(0) + acc, 0);
+      const hue = hash % 360;
+      return `hsl(${hue}, 70%, 50%)`;
+   };
+
+   const cassetteColor = getColorFromTrack(currentTrack);
 
    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -32,7 +42,7 @@ const Casette: FC<ICasetteProps> = ({ onLinkChange, children, isPlaying, onPlayi
             <div className="main__top">
                   <h2 className="main__title">listen!</h2>
             </div>
-            <div className="main__bottom">
+            <div className="main__bottom" style={{ '--cassette-color': cassetteColor } as React.CSSProperties}>
                <img src={ audocassete } className="main__image" alt='vintage audio cassette tape' draggable={false}/>
                <div className={`main__reel main__reel--left ${isPlaying ? 'spin' : ''}`}></div>
                <div className={`main__reel main__reel--right ${isPlaying ? 'spin' : ''}`}></div>
