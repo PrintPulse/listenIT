@@ -16,6 +16,7 @@ const MainPage: FC = () => {
    const [isAuthed, setIsAuthed] = useState<boolean>(currAuthContext.isAuthed);
    const [isAuthModalOpen, setAuthModalOpen] = useState<boolean>(!isAuthed);
    const [queueState, setQueueState] = useState<IQueueState | null>(null);
+   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
    useEffect(() => {
       checkUserStatus();
@@ -45,8 +46,8 @@ const MainPage: FC = () => {
    return (
       <div className='container'>
          <Circles />
-         <Casette onLinkChange={handleLinkChange}>
-            <Queue queueItem={queueState} />
+         <Casette onLinkChange={handleLinkChange} isPlaying={isPlaying} onPlayingChange={setIsPlaying}>
+            <Queue queueItem={queueState} isPlaying={isPlaying} onPlayingChange={setIsPlaying} />
          </Casette>
          {isAuthed && isAuthModalOpen &&
             <AuthModal onSuccess={handleAuthSuccess} />

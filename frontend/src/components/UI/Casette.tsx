@@ -5,9 +5,11 @@ import './Casette.scss';
 interface ICasetteProps {
    onLinkChange: (value: string) => void;
    children: ReactNode;
+   isPlaying: boolean;
+   onPlayingChange: (isPlaying: boolean) => void;
 };
 
-const Casette: FC<ICasetteProps> = ({ onLinkChange, children }) => {
+const Casette: FC<ICasetteProps> = ({ onLinkChange, children, isPlaying, onPlayingChange }) => {
    const [linkInput, setLinkInput] = useState<string>('');
    const [isFormVisible, setIsFormVisible] = useState<boolean>(true);
 
@@ -32,6 +34,8 @@ const Casette: FC<ICasetteProps> = ({ onLinkChange, children }) => {
             </div>
             <div className="main__bottom">
                <img src={ audocassete } className="main__image" alt='vintage audio cassette tape' draggable={false}/>
+               <div className={`main__reel main__reel--left ${isPlaying ? 'spin' : ''}`}></div>
+               <div className={`main__reel main__reel--right ${isPlaying ? 'spin' : ''}`}></div>
                <div className="main__inner">
                   <div className="main__input-container">
                      {isFormVisible &&

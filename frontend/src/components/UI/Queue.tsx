@@ -4,6 +4,8 @@ import AudioPlayer from './AudioPlayer';
 
 interface IQueueProps {
    queueItem: IQueueState | null; 
+   isPlaying: boolean;
+   onPlayingChange: (isPlaying: boolean) => void;
 };
 
 interface IQueueState {
@@ -11,7 +13,7 @@ interface IQueueState {
    url: string;
 };
 
-const Queue: FC<IQueueProps> = ({ queueItem }) => {
+const Queue: FC<IQueueProps> = ({ queueItem, isPlaying, onPlayingChange}) => {
    const [queue, setQueue] = useState<IQueueState[]>([]);
    const [currIndex, setCurrIndex] = useState<number>(-1);
    const bgContext = useContext(BackgroundContext);
@@ -59,7 +61,7 @@ const Queue: FC<IQueueProps> = ({ queueItem }) => {
             {currRadio ? (
                <div className='queue__curr-playing__item'>
                   <p className='queue__curr-playing__url'>{currRadio.url}</p>
-                  <AudioPlayer streamUrl={currRadio.url} />
+                  <AudioPlayer streamUrl={currRadio.url} isPlaying={isPlaying} onPlayingChange={onPlayingChange}/>
                </div>
             ) : (
                <p className='queue__curr-playing__warning'>Нет текущей станции</p>
