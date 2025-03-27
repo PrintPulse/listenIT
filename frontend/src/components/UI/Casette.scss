@@ -71,19 +71,4 @@ $gray-text: #949494;
             display: none;
         }
     }
-    &__button {
-        background: url('../../images/arrow-left.png') no-repeat center center;
-        background-size: cover;
-        border: 0;
-        width: 100dvw;
-        max-width: 74px;
-        height: 52px;
-
-        &--next {
-            transform: rotateY(180deg);
-        }
-        &:hover {
-            cursor: pointer;
-        }
-    }
 }
