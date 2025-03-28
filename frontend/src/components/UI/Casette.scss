@@ -17,6 +17,10 @@ $gray-text: #949494;
         width: 100%;
         max-width: 640px;
         position: relative;
+        transition: box-shadow 0.5s ease;
+        &:hover {
+         box-shadow: 0 0 20px var(--cassette-color);
+      }
     }
     &__inner {
         display: flex;
@@ -37,6 +41,7 @@ $gray-text: #949494;
         height: 100%;
         max-width: 640px;
         max-height: 407px;
+        filter: drop-shadow(0 0 5px var(--cassette-color));
     }
     &__input {
         border: 1px solid $gray-input-border;
