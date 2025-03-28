@@ -21,5 +21,8 @@ class Radio(Base):
     name = Column(String(100), unique=True, nullable=False)
     source = Column(String(250), unique=True, nullable=False)
     users = relationship(
-        "User", secondary="user_radio", back_populates="radios"
+        "User",
+        secondary="user_radio",
+        back_populates="radios",
+        lazy="raise",
     )

@@ -1,1 +1,1 @@
-from .radios import Radio  # noqa
+from .radios import RadioDB  # noqa

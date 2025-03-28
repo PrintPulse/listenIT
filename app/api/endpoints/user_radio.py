@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Body, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.schemas import Radio
+from app.api.schemas import RadioDB
+from app.api.validators import check_name_exists
 from app.core.db import get_async_session
 from app.core.user import current_user
 from app.models import User
@@ -10,7 +11,7 @@ from app.services import user_radio_manager
 router = APIRouter()
 
 
-@router.get("/", response_model=list[Radio])
+@router.get("/", response_model=list[RadioDB])
 async def get_favorite_radio(
     session: AsyncSession = Depends(get_async_session),
     user: User = Depends(current_user),
@@ -21,18 +22,23 @@ async def get_favorite_radio(
     return favorites
 
 
-@router.post("/", response_model=Radio)
+@router.post("/", response_model=RadioDB)
 async def add_favorite_radio(
-    radio: Radio,
+    name: str = Body(..., embed=True),
     session: AsyncSession = Depends(get_async_session),
     user: User = Depends(current_user),
 ):
-    pass
+    radio_obj = await check_name_exists(radio_name=name, session=session)
+
+    favorite_radio = await user_radio_manager.add_favorite(
+        session=session, user=user, radio=radio_obj
+    )
+    return favorite_radio
 
 
-@router.delete("/")
+@router.delete("/", response_model=RadioDB)
 async def delete_favorite_radio(
-    radio: Radio,
+    name: str = Body(..., embed=True),
     session: AsyncSession = Depends(get_async_session),
     user: User = Depends(current_user),
 ):
