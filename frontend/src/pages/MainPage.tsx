@@ -5,6 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import { isUserAuthed } from '../services/authService';
 import AuthModal from '../components/UI/AuthModal';
 import Queue from '../components/UI/Queue';
+import QueueList from '../components/UI/QueueList';
 
 interface IQueueState {
    id: number;
@@ -18,6 +19,7 @@ const MainPage: FC = () => {
    const [queueState, setQueueState] = useState<IQueueState | null>(null);
    const [isPlaying, setIsPlaying] = useState<boolean>(false);
    const [currentTrack, setCurrentTrack] = useState<string>('');
+   const [queueList, setQueueList] = useState<IQueueState[]>([]);
 
    useEffect(() => {
       checkUserStatus();
@@ -47,8 +49,11 @@ const MainPage: FC = () => {
    return (
       <div className='container'>
          <Circles />
+         {currentTrack &&
+            <QueueList queue={queueList} />
+         }
          <Casette onLinkChange={handleLinkChange} isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack}>
-            <Queue queueItem={queueState} isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack} onTrackChange={setCurrentTrack}/>
+            <Queue queueItem={queueState} isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack} onTrackChange={setCurrentTrack} onQueueUpdate={setQueueList}/>
          </Casette>
          {isAuthed && isAuthModalOpen &&
             <AuthModal onSuccess={handleAuthSuccess} />
