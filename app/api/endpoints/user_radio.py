@@ -2,7 +2,7 @@ from fastapi import APIRouter, Body, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.schemas import RadioDB
-from app.api.validators import check_name_exists
+from app.api.validators import check_favorite_exists, check_name_exists
 from app.core.db import get_async_session
 from app.core.user import current_user
 from app.models import User
@@ -29,6 +29,8 @@ async def add_favorite_radio(
     user: User = Depends(current_user),
 ):
     radio_obj = await check_name_exists(radio_name=name, session=session)
+
+    await check_favorite_exists(user=user, radio=radio_obj, session=session)
 
     favorite_radio = await user_radio_manager.add_favorite(
         session=session, user=user, radio=radio_obj

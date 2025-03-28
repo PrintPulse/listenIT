@@ -1,8 +1,8 @@
 from fastapi import HTTPException
-from sqlalchemy import select
+from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import Radio
+from app.models import Radio, User, UserRadio
 
 
 async def check_name_exists(radio_name: str, session: AsyncSession):
@@ -16,3 +16,27 @@ async def check_name_exists(radio_name: str, session: AsyncSession):
             status_code=404, detail=f"Радио {radio_name} не существует!"
         )
     return obj
+
+
+async def check_favorite_exists(
+    user: User, radio: Radio, session: AsyncSession
+):
+    obj = (
+        (
+            await session.execute(
+                select(UserRadio).where(
+                    and_(
+                        UserRadio.user_id == user.id,
+                        UserRadio.radio_id == radio.id,
+                    )
+                )
+            )
+        )
+        .scalars()
+        .first()
+    )
+    if obj is not None:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Радио {radio.name} уже добавлено в избранное!",
+        )
