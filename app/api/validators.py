@@ -1,4 +1,4 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,7 +13,8 @@ async def check_name_exists(radio_name: str, session: AsyncSession):
     )
     if obj is None:
         raise HTTPException(
-            status_code=404, detail=f"Радио {radio_name} не существует!"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Радио {radio_name} не существует!",
         )
     return obj
 
@@ -37,14 +38,14 @@ async def check_favorite_exists(
     )
     if obj is not None and key == "add":
         raise HTTPException(
-            status_code=400,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Радио {radio.name} уже добавлено в избранное!",
         )
 
     if key == "delete":
         if obj is None:
             raise HTTPException(
-                status_code=400,
+                status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Радио {radio.name} не было добавлено в избранное!",
             )
         return obj

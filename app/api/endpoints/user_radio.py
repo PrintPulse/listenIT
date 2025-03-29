@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.schemas import RadioDB
 from app.api.validators import check_favorite_exists, check_name_exists
+from app.core.constans import ERRORS_ADD, ERRORS_DELETE
 from app.core.db import get_async_session
 from app.core.user import current_user
 from app.models import User
@@ -22,7 +23,7 @@ async def get_favorite_radio(
     return favorites
 
 
-@router.post("/", response_model=RadioDB)
+@router.post("/", response_model=RadioDB, responses=ERRORS_ADD)
 async def add_favorite_radio(
     name: str = Body(..., embed=True),
     session: AsyncSession = Depends(get_async_session),
@@ -40,7 +41,7 @@ async def add_favorite_radio(
     return add_obj
 
 
-@router.delete("/", response_model=RadioDB)
+@router.delete("/", response_model=RadioDB, responses=ERRORS_DELETE)
 async def delete_favorite_radio(
     name: str = Body(..., embed=True),
     session: AsyncSession = Depends(get_async_session),
