@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect, useContext } from 'react';
 import { BackgroundContext } from '../../context/BackgroundContext';
 import AudioPlayer from './AudioPlayer';
 
-interface IQueueProps {
+interface IQueueCurrPlayingProps {
    queueItem: IQueueState | null; 
    isPlaying: boolean;
    onPlayingChange: (isPlaying: boolean) => void;
@@ -16,7 +16,7 @@ interface IQueueState {
    url: string;
 };
 
-const Queue: FC<IQueueProps> = ({ queueItem, isPlaying, onPlayingChange, currentTrack, onTrackChange, onQueueUpdate }) => {
+const QueueCurrPlaying: FC<IQueueCurrPlayingProps> = ({ queueItem, isPlaying, onPlayingChange, currentTrack, onTrackChange, onQueueUpdate }) => {
    const [queue, setQueue] = useState<IQueueState[]>([]);
    const [currIndex, setCurrIndex] = useState<number>(-1);
    const bgContext = useContext(BackgroundContext);
@@ -76,4 +76,4 @@ const Queue: FC<IQueueProps> = ({ queueItem, isPlaying, onPlayingChange, current
    )
 };
 
-export default Queue;
+export default QueueCurrPlaying;

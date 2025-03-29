@@ -4,7 +4,7 @@ import Casette from '../components/UI/Casette';
 import { AuthContext } from '../context/AuthContext';
 import { isUserAuthed } from '../services/authService';
 import AuthModal from '../components/UI/AuthModal';
-import Queue from '../components/UI/Queue';
+import QueueCurrPlaying from '../components/UI/QueueCurrPlaying';
 import QueueList from '../components/UI/QueueList';
 
 interface IQueueState {
@@ -53,7 +53,7 @@ const MainPage: FC = () => {
             <QueueList queue={queueList} />
          }
          <Casette onLinkChange={handleLinkChange} isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack}>
-            <Queue queueItem={queueState} isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack} onTrackChange={setCurrentTrack} onQueueUpdate={setQueueList}/>
+            <QueueCurrPlaying queueItem={queueState} isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack} onTrackChange={setCurrentTrack} onQueueUpdate={setQueueList}/>
          </Casette>
          {isAuthed && isAuthModalOpen &&
             <AuthModal onSuccess={handleAuthSuccess} />
