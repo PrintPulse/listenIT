@@ -6,6 +6,7 @@ import { isUserAuthed } from '../services/authService';
 import AuthModal from '../components/UI/AuthModal';
 import QueueCurrPlaying from '../components/UI/QueueCurrPlaying';
 import QueueList from '../components/UI/QueueList';
+import Snackbar from '../components/UI/Snackbar';
 
 interface IQueueState {
    id: number;
@@ -55,7 +56,7 @@ const MainPage: FC = () => {
          <Casette onLinkChange={handleLinkChange} isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack}>
             <QueueCurrPlaying queueItem={queueState} isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack} onTrackChange={setCurrentTrack} onQueueUpdate={setQueueList}/>
          </Casette>
-         {isAuthed && isAuthModalOpen &&
+         {!isAuthed && isAuthModalOpen &&
             <AuthModal onSuccess={handleAuthSuccess} />
          }
       </div>

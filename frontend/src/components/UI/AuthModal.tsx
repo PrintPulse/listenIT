@@ -1,7 +1,8 @@
-import React, { FC, FormEvent, useState, useContext } from 'react';
+import React, { FC, FormEvent, useState, useContext, act } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { loginUser, registerUser, resetPassStep1, resetPassStep2 } from '../../services/authService';
 import './AuthModal.scss';
+import Snackbar from './Snackbar';
 
 type AuthModalProps = {
    onSuccess: () => void;
@@ -28,7 +29,7 @@ const AuthModal: FC<AuthModalProps> = ({ onSuccess }) => {
    const [password, setPassword] = useState<string>('');
    const [isLoading, setIsLoading] = useState<boolean>(false);
    const [errorResponseInfo, setErrorResponseInfo] = useState<string | null>(null);
-   const [isSuccessAction, setIsSuccessAction] = useState<string>('');
+   const [actionStatus, setActionStatus] = useState<string>('');
 
    const currStep = authSteps[currStepIndex];
 
@@ -44,10 +45,15 @@ const AuthModal: FC<AuthModalProps> = ({ onSuccess }) => {
       }
    };
 
+   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, inputType: 'email' | 'password') => {
+      if (inputType === 'email') setEmail(e.target.value);
+      else if (inputType === 'password') setPassword(e.target.value);
+   };
+
    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       setIsLoading(true);
-      setIsSuccessAction('');
+      setActionStatus('');
       setErrorResponseInfo(null);
       
       try {
@@ -56,7 +62,7 @@ const AuthModal: FC<AuthModalProps> = ({ onSuccess }) => {
                response = await registerUser(email, password);
    
                if (response?.is_active) {
-                  setIsSuccessAction('Вы успешно зарегистрированы, войдите в аккаунт');
+                  setActionStatus('Вы успешно зарегистрированы, войдите в аккаунт');
                }
                else if (response?.error) {
                   setErrorResponseInfo(response.error);
@@ -68,7 +74,7 @@ const AuthModal: FC<AuthModalProps> = ({ onSuccess }) => {
                if (response?.access_token) {
                   localStorage.setItem('token', response.access_token);
                   setIsAuthed(true);
-                  setIsSuccessAction('Вы успешно авторизованы');
+                  setActionStatus('Вы успешно авторизованы');
                   onSuccess();
                }
                else if (response?.error) {
@@ -81,7 +87,7 @@ const AuthModal: FC<AuthModalProps> = ({ onSuccess }) => {
                if (response?.token) {
                   setCurrStepIndex(3);
                   localStorage.setItem('token-reset', response.token);
-                  setIsSuccessAction('Успех, перейдите к следующему этапу');
+                  setActionStatus('Успех, перейдите к следующему этапу');
                }
                else if (response?.error) {
                   setErrorResponseInfo(response.error);
@@ -94,7 +100,7 @@ const AuthModal: FC<AuthModalProps> = ({ onSuccess }) => {
                   const response = await resetPassStep2(tokenReset, password);
 
                   if (Object.keys(response).length === 0) {
-                     setIsSuccessAction('Ваш пароль успешно обновлён');
+                     setActionStatus('Ваш пароль успешно обновлён');
                      localStorage.removeItem('token-reset');
                   }
                   else if (response?.details) {
@@ -120,7 +126,11 @@ const AuthModal: FC<AuthModalProps> = ({ onSuccess }) => {
                <h3 className="auth-modal__title">{currStep.title}</h3>
                <form onSubmit={ handleSubmit } className="auth-modal__form">
                   {currStep.inputs.map((input, index) => (
-                     <input key={index} type={input.type} placeholder={input.placeholder} value={ input.type === 'email' ? email : password } className={`auth-modal__input auth-modal__input--${input.type}`} autoComplete='off' />
+                     <input 
+                        key={index} type={input.type} placeholder={input.placeholder} 
+                        value={ input.type === 'email' ? email : password } onChange={(e) => handleInputChange(e, input.type as 'email' | 'password')}
+                        className={`auth-modal__input auth-modal__input--${input.type}`} autoComplete='off' 
+                     />
                   ))}
                   <button className="auth-modal__button--submit" type='submit'>
                      {currStep.buttonText}
@@ -131,8 +141,8 @@ const AuthModal: FC<AuthModalProps> = ({ onSuccess }) => {
                   {errorResponseInfo &&
                      <p>{errorResponseInfo}</p>
                   }
-                  {isSuccessAction &&
-                     <p>{isSuccessAction}</p>
+                  {actionStatus &&
+                     <Snackbar type='success' message={actionStatus} />
                   }
                   {currStepIndex === 1 &&
                      <button onClick={ () => setCurrStepIndex(2) } type='submit' className="auth-modal__button--reset">Забыли пароль? Восстановить пароль</button>
