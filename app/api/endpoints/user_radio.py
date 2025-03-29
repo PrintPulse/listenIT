@@ -30,12 +30,14 @@ async def add_favorite_radio(
 ):
     radio_obj = await check_name_exists(radio_name=name, session=session)
 
-    await check_favorite_exists(user=user, radio=radio_obj, session=session)
+    await check_favorite_exists(
+        user=user, radio=radio_obj, session=session, key="add"
+    )
 
-    favorite_radio = await user_radio_manager.add_favorite(
+    add_obj = await user_radio_manager.add_favorite(
         session=session, user=user, radio=radio_obj
     )
-    return favorite_radio
+    return add_obj
 
 
 @router.delete("/", response_model=RadioDB)
@@ -44,4 +46,13 @@ async def delete_favorite_radio(
     session: AsyncSession = Depends(get_async_session),
     user: User = Depends(current_user),
 ):
-    pass
+    radio_obj = await check_name_exists(radio_name=name, session=session)
+
+    favorite_obj = await check_favorite_exists(
+        user=user, radio=radio_obj, session=session, key="delete"
+    )
+
+    del_radio = await user_radio_manager.del_favorite(
+        del_obj=favorite_obj, radio=radio_obj, session=session
+    )
+    return del_radio

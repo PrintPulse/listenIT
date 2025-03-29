@@ -19,7 +19,7 @@ async def check_name_exists(radio_name: str, session: AsyncSession):
 
 
 async def check_favorite_exists(
-    user: User, radio: Radio, session: AsyncSession
+    user: User, radio: Radio, session: AsyncSession, key: str
 ):
     obj = (
         (
@@ -35,8 +35,16 @@ async def check_favorite_exists(
         .scalars()
         .first()
     )
-    if obj is not None:
+    if obj is not None and key == "add":
         raise HTTPException(
             status_code=400,
             detail=f"Радио {radio.name} уже добавлено в избранное!",
         )
+
+    if key == "delete":
+        if obj is None:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Радио {radio.name} не было добавлено в избранное!",
+            )
+        return obj

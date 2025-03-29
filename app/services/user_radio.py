@@ -23,17 +23,20 @@ class ManagerUserRadio:
     async def add_favorite(
         cls, session: AsyncSession, user: User, radio: Radio
     ):
-        obj = UserRadio(user_id=user.id, radio_id=radio.id)
-        session.add(obj)
+        add_obj = UserRadio(user_id=user.id, radio_id=radio.id)
+        session.add(add_obj)
         await session.commit()
         await session.refresh(radio)
         return radio
 
     @classmethod
     async def del_favorite(
-        cls, session: AsyncSession, user: User, radio: Radio
+        cls, del_obj: UserRadio, radio: Radio, session: AsyncSession
     ):
-        pass
+        await session.delete(del_obj)
+        await session.commit()
+        await session.refresh(radio)
+        return radio
 
 
 user_radio_manager = ManagerUserRadio()
