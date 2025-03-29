@@ -1,13 +1,8 @@
 import axios from "axios";
-
-interface IRadio {
-   id: number;
-   name: string;
-   source: string;
-};
+import { IRadioItem } from "../types";
 
 interface IRadioResponse {
-   stations: IRadio[];
+   stations: IRadioItem[];
    error?: string;
 };
 
