@@ -1,7 +1,7 @@
 import axios from "axios";
 import { IRadioItem } from "../types";
 
-interface IRadioResponse {
+export interface IRadioResponse {
    stations: IRadioItem[];
    error?: string;
 };

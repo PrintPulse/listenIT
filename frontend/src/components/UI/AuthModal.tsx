@@ -34,6 +34,8 @@ const AuthModal: FC<AuthModalProps> = ({ onSuccess }) => {
    const currStep = authSteps[currStepIndex];
 
    const handleSwitchStep = () => {
+      setErrorResponseInfo(null);
+      
       if (currStepIndex === 0) {
          setCurrStepIndex(1);
       } 

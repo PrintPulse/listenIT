@@ -1,18 +1,33 @@
-import React, { FC, useState, ReactNode } from 'react';
+import React, { FC, ReactNode, useEffect } from 'react';
+import { IRadioItem } from '../../types';
+import { radioService } from '../../services/radioService';
 import audocassete from '../../images/audiocassete.png';
 import './Casette.scss';
 
 interface ICasetteProps {
-   onLinkChange: (value: string) => void;
    children: ReactNode;
    isPlaying: boolean;
-   onPlayingChange: (isPlaying: boolean) => void;
    currentTrack?: string;
+   radioStations: IRadioItem[];
+   onRadioStationsUpdate: (stations: IRadioItem[]) => void;
 };
 
-const Casette: FC<ICasetteProps> = ({ onLinkChange, children, isPlaying, onPlayingChange, currentTrack }) => {
-   const [linkInput, setLinkInput] = useState<string>('');
-   const [isFormVisible, setIsFormVisible] = useState<boolean>(true);
+const Casette: FC<ICasetteProps> = ({ children, isPlaying, currentTrack, radioStations, onRadioStationsUpdate }) => {
+
+   useEffect(() => {
+      const loadRadioStations = async () => {
+         const result = await radioService.getRadio()
+   
+            if (result?.error) {
+               return result.error;
+            }
+            else {
+               onRadioStationsUpdate(result.stations);
+            }
+      };   
+
+      loadRadioStations();
+   }, []);
 
    const getColorFromTrack = (track: string | undefined) => {
       if (!track) return '#ffffff';
@@ -22,19 +37,6 @@ const Casette: FC<ICasetteProps> = ({ onLinkChange, children, isPlaying, onPlayi
    };
 
    const cassetteColor = getColorFromTrack(currentTrack);
-
-   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-
-      if (!linkInput.trim()) return;
-
-      const urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
-      if (!urlRegex.test(linkInput.trim())) return;
-
-      onLinkChange(linkInput);
-      setLinkInput('');
-      setIsFormVisible(false);
-   };
 
    return (
       <>
@@ -47,23 +49,7 @@ const Casette: FC<ICasetteProps> = ({ onLinkChange, children, isPlaying, onPlayi
                <div className={`main__reel main__reel--left ${isPlaying ? 'spin' : ''}`}></div>
                <div className={`main__reel main__reel--right ${isPlaying ? 'spin' : ''}`}></div>
                <div className="main__inner">
-                  <div className="main__input-container">
-                     {isFormVisible &&
-                        <form onSubmit={ handleSubmit } className='main__form'>
-                           <input 
-                              value={ linkInput } 
-                              onChange={ (e: React.ChangeEvent<HTMLInputElement>) => setLinkInput(e.target.value) }
-                              type="text" name="url" id='url' className='main__input' title='Нажмите Enter для поиска' placeholder=' '
-                           />
-                           <label htmlFor="url" className={`main__label ${linkInput ? 'invisible' : ''} ${linkInput ? '' : 'transparent'}`}>
-                              Вставьте url-ссылку на радио...
-                           </label>
-                        </form>
-                     }
-                  </div>
-                  {!isFormVisible &&
-                     children
-                  }
+                  {children}
                </div>
             </div>
          </main>

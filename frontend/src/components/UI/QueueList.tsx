@@ -1,27 +1,41 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
+import { radioService } from '../../services/radioService';
+import { IRadioItem } from '../../types';
 import './QueueList.scss';
 
 interface IQueueListProps {
-   queue: IQueueState[];
-};
-
-interface IQueueState {
-   id: number;
-   url: string;
-   liked?: boolean;
+   queue: IRadioItem[];
 };
 
 const QueueList: FC<IQueueListProps> = ({ queue }) => {
-   const [likedItems, setLikedItems] = useState<IQueueState[]>([]);
+   const [likedItems, setLikedItems] = useState<IRadioItem[]>([]);
 
-   const handleLikeItem = (e: React.MouseEvent<HTMLButtonElement>, item: IQueueState) => {
-      setLikedItems(prev => {
-         const isItemLiked = prev.some(likedItem => likedItem.id === item.id);
+   useEffect(() => {
+      const loadFavorites = async () => {
+         const result = await radioService.getFavorites();
 
-         if (isItemLiked) return prev.filter(likedItem => likedItem.id !== item.id);
+         if (result?.error) {
+            return result.error;
+         }
+         else {
+            setLikedItems(result.stations);
+         }
+      };
 
-         return [...prev, { ...item, liked: true }];
-      });
+      loadFavorites();
+   }, []);
+
+   const handleLikeButton = async (item: IRadioItem) => {
+      let result;
+      let isLiked = likedItems.includes(item);
+
+      if (isLiked) result = await radioService.postFavorites(item.name);
+      else result = await radioService.deleteFavorite(item.name);
+
+      if (result?.error) return result.error;
+
+      if (isLiked) setLikedItems(prev => [...prev, { ...item }]);
+      else setLikedItems(prev => prev.filter(likedItem => likedItem.id !== item.id));
    };
 
    return (
@@ -32,9 +46,9 @@ const QueueList: FC<IQueueListProps> = ({ queue }) => {
                {queue.map((item) => (
                   <li key={item.id} className='queue-list__item'>
                      <p className='queue-list__item-position'>{item.id}</p>
-                     <p className='queue-list__item-name'>{item.url}</p>
+                     <p className='queue-list__item-name'>{item.name}</p>
                      <button
-                        onClick={ (e) => handleLikeItem(e, item) }
+                        onClick={ () => handleLikeButton(item) }
                         className={`queue-list__item-button ${likedItems.some(likedItem => likedItem.id === item.id) ? 'queue-list__item-button--liked' : ''}`}
                      />
                   </li>
@@ -46,9 +60,9 @@ const QueueList: FC<IQueueListProps> = ({ queue }) => {
             <ul className='queue-list__list'>
                {likedItems.map((item) => (
                   <li key={item.id} className='queue-list__item'>
-                     <p className='queue-list__item-name'>{item.url}</p>
+                     <p className='queue-list__item-name'>{item.name}</p>
                      <button
-                        onClick={ (e) => handleLikeItem(e, item) }
+                        onClick={ () => handleLikeButton(item) }
                         className={`queue-list__item-button ${likedItems.some(likedItem => likedItem.id === item.id) ? 'queue-list__item-button--liked' : ''}`}
                      />
                   </li>

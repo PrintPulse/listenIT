@@ -6,21 +6,15 @@ import { isUserAuthed } from '../services/authService';
 import AuthModal from '../components/UI/AuthModal';
 import QueueCurrPlaying from '../components/UI/QueueCurrPlaying';
 import QueueList from '../components/UI/QueueList';
-import Snackbar from '../components/UI/Snackbar';
-
-interface IQueueState {
-   id: number;
-   url: string;
-};
+import { IRadioItem } from '../types';
 
 const MainPage: FC = () => {
    const currAuthContext = useContext(AuthContext) || { isAuthed: false};
    const [isAuthed, setIsAuthed] = useState<boolean>(currAuthContext.isAuthed);
    const [isAuthModalOpen, setAuthModalOpen] = useState<boolean>(!isAuthed);
-   const [queueState, setQueueState] = useState<IQueueState | null>(null);
    const [isPlaying, setIsPlaying] = useState<boolean>(false);
    const [currentTrack, setCurrentTrack] = useState<string>('');
-   const [queueList, setQueueList] = useState<IQueueState[]>([]);
+   const [radioStations, setRadioStations] = useState<IRadioItem[]>([]);
 
    useEffect(() => {
       checkUserStatus();
@@ -43,21 +37,19 @@ const MainPage: FC = () => {
       setAuthModalOpen(false);
    };
 
-   const handleLinkChange = (link: string) => {
-      setQueueState({ id: Date.now(), url: link });
-   };
-
    return (
       <div className='container'>
          <Circles />
          {currentTrack &&
-            <QueueList queue={queueList} />
+            <QueueList queue={radioStations} />
          }
-         <Casette onLinkChange={handleLinkChange} isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack}>
-            <QueueCurrPlaying queueItem={queueState} isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack} onTrackChange={setCurrentTrack} onQueueUpdate={setQueueList}/>
-         </Casette>
          {!isAuthed && isAuthModalOpen &&
             <AuthModal onSuccess={handleAuthSuccess} />
+         }
+         {isAuthed &&
+            <Casette isPlaying={isPlaying} currentTrack={currentTrack} radioStations={radioStations} onRadioStationsUpdate={setRadioStations}>
+               <QueueCurrPlaying isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack} onTrackChange={setCurrentTrack} queueList={radioStations} />
+            </Casette>
          }
       </div>
    );
