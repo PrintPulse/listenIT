@@ -37,3 +37,5 @@ ERRORS_DELETE = {
 
 ERRORS_ADD.update(ERROR_404)
 ERRORS_DELETE.update(ERROR_404)
+
+ACOUST_URL = "https://api.acoustid.org/v2/lookup"

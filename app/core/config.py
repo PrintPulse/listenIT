@@ -10,6 +10,7 @@ class Config(BaseSettings):
     allows_hosts: str
     email_first_admin: EmailStr
     password_first_admin: str
+    client_key_fingerprint: str
 
 
 config = Config()
