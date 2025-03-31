@@ -1,0 +1,46 @@
+$color-green-success: #A5D6A7;
+$color-red-error: #EF9A9A;
+
+.snackbar {
+   position: absolute;
+   top: 2.5dvh;
+   right: 2.5dvw;
+
+   &__inner {
+      display: flex;
+      align-items: center;
+      border-radius: 16px;
+      padding: 15px;
+      position: relative;
+
+      &--error {
+         border: 1px solid $color-red-error;
+         background-color: $color-red-error;
+
+         &::before {
+            content: '';
+            background: url('../../images/icon-snackbar-error.png') no-repeat center center;
+            background-size: contain;
+            width: 25px;
+            height: 25px;
+            position: absolute;
+         }
+      }
+      &--success {
+         border: 1px solid $color-green-success;
+         background-color: $color-green-success;
+
+         &::before {
+            content: '';
+            background: url('../../images/icon-snackbar-success.png') no-repeat center center;
+            background-size: contain;
+            width: 25px;
+            height: 25px;
+            position: absolute;
+         }
+      }
+   }
+   &__text {
+      padding-left: 30px;
+   }
+}
