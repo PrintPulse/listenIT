@@ -31,11 +31,19 @@ body {
 }
 .queue {
    width: 59.375dvw;
-   height: 95px;
-   max-width: 190px;
+   height: 270px;
+   max-width: 325px;
    position: relative;
+   text-align: center;
 
+   &__title {
+      font-size: 1.5rem;
+      margin-bottom: 7px;
+   }
    &__curr-playing {
+      &__item {
+         text-align: center;
+      }
       &__audio {
          width: 59.375dvw;
          height: 105px;
@@ -49,7 +57,7 @@ body {
          max-width: 545px;
          position: absolute;
          top: 50%;
-         left: -185px;
+         left: -115px;
          transform: translateY(-50%);
       }
       &__button {
@@ -81,8 +89,10 @@ body {
       justify-content: space-between;
       background-color: inherit;
       border-radius: 4px;
-      width: 175px;
-      z-index: 2;
+      width: 185px;
+      position: absolute;
+      bottom: 27.5px;
+      left: 65px;
 
       &__button {
          width: 50px;
