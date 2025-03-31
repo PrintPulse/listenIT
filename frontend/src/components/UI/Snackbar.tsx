@@ -1,12 +1,8 @@
 import React, { FC, useState, useEffect } from 'react';
+import { ISnackbarMsg } from '../../types';
 import './Snackbar.scss';
 
-interface ISnackbarProps {
-   type: 'error' | 'success';
-   message: string;
-};
-
-const Snackbar: FC<ISnackbarProps> = ({ type, message }) => {
+const Snackbar: FC<ISnackbarMsg> = ({ type, message }) => {
    const [visible, setVisible] = useState(true);
 
    useEffect(() => {
@@ -18,6 +14,7 @@ const Snackbar: FC<ISnackbarProps> = ({ type, message }) => {
    }, [type, message]);
 
    if (!visible) return null;
+   else if (type === null) return null;
 
    return (
       <div className='snackbar'>

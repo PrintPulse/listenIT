@@ -5,9 +5,11 @@ import './QueueList.scss';
 
 interface IQueueListProps {
    queue: IRadioItem[];
+   handleSnackbarMsg: (snackbarMsg: string) => void;
+   handleSnackbarType: (snackbarType: "error" | "success" | null) => void;
 };
 
-const QueueList: FC<IQueueListProps> = ({ queue }) => {
+const QueueList: FC<IQueueListProps> = ({ queue, handleSnackbarMsg, handleSnackbarType }) => {
    const [likedItems, setLikedItems] = useState<IRadioItem[]>([]);
 
    useEffect(() => {
@@ -15,7 +17,9 @@ const QueueList: FC<IQueueListProps> = ({ queue }) => {
          const result = await radioService.getFavorites();
 
          if (result?.error) {
-            return result.error;
+            handleSnackbarMsg(result.error);
+            handleSnackbarType('error');
+            return;
          }
          else {
             setLikedItems(result.stations);
@@ -32,7 +36,11 @@ const QueueList: FC<IQueueListProps> = ({ queue }) => {
       if (isLiked) result = await radioService.postFavorites(item.name);
       else result = await radioService.deleteFavorite(item.name);
 
-      if (result?.error) return result.error;
+      if (result?.error) {
+         handleSnackbarMsg(result.error);
+         handleSnackbarType('error');
+         return;
+      }
 
       if (isLiked) setLikedItems(prev => [...prev, { ...item }]);
       else setLikedItems(prev => prev.filter(likedItem => likedItem.id !== item.id));

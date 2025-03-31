@@ -7,6 +7,8 @@ import AuthModal from '../components/UI/AuthModal';
 import QueueCurrPlaying from '../components/UI/QueueCurrPlaying';
 import QueueList from '../components/UI/QueueList';
 import { IRadioItem } from '../types';
+import Snackbar from '../components/UI/Snackbar';
+import { ISnackbarMsg } from '../types';
 
 const MainPage: FC = () => {
    const currAuthContext = useContext(AuthContext) || { isAuthed: false};
@@ -15,6 +17,8 @@ const MainPage: FC = () => {
    const [isPlaying, setIsPlaying] = useState<boolean>(false);
    const [currentTrack, setCurrentTrack] = useState<string>('');
    const [radioStations, setRadioStations] = useState<IRadioItem[]>([]);
+   const [snackbarMsg, setSnackbarMsg] = useState<string>('');
+   const [snackbarType, setSnackbarType] = useState<"error" | "success" | null>(null);
 
    useEffect(() => {
       checkUserStatus();
@@ -37,18 +41,31 @@ const MainPage: FC = () => {
       setAuthModalOpen(false);
    };
 
+   const handleSnackbarMsg = (msg: string) => {
+      setSnackbarMsg(msg);
+   };
+
+   const handleSnackbarType = (type: "error" | "success" | null) => {
+      setSnackbarType(type);
+   };
+
    return (
       <div className='container'>
+         <Snackbar type={snackbarType} message={snackbarMsg} />
          <Circles />
          {currentTrack &&
-            <QueueList queue={radioStations} />
+            <QueueList queue={radioStations} handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType} />
          }
          {!isAuthed && isAuthModalOpen &&
             <AuthModal onSuccess={handleAuthSuccess} />
          }
          {isAuthed &&
-            <Casette isPlaying={isPlaying} currentTrack={currentTrack} radioStations={radioStations} onRadioStationsUpdate={setRadioStations}>
-               <QueueCurrPlaying isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack} onTrackChange={setCurrentTrack} queueList={radioStations} />
+            <Casette isPlaying={isPlaying} currentTrack={currentTrack} radioStations={radioStations} onRadioStationsUpdate={setRadioStations}
+               handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType}
+            >
+               <QueueCurrPlaying isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack} onTrackChange={setCurrentTrack} 
+                  queueList={radioStations} handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType}
+               />
             </Casette>
          }
       </div>

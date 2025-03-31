@@ -10,20 +10,23 @@ interface ICasetteProps {
    currentTrack?: string;
    radioStations: IRadioItem[];
    onRadioStationsUpdate: (stations: IRadioItem[]) => void;
+   handleSnackbarMsg: (snackbarMsg: string) => void;
+   handleSnackbarType: (snackbarType: "error" | "success" | null) => void;
 };
 
-const Casette: FC<ICasetteProps> = ({ children, isPlaying, currentTrack, radioStations, onRadioStationsUpdate }) => {
+const Casette: FC<ICasetteProps> = ({ children, isPlaying, currentTrack, radioStations, onRadioStationsUpdate, handleSnackbarMsg, handleSnackbarType }) => {
 
    useEffect(() => {
       const loadRadioStations = async () => {
          const result = await radioService.getRadio()
    
-            if (result?.error) {
-               return result.error;
-            }
-            else {
-               onRadioStationsUpdate(result.stations);
-            }
+         if (result?.error) {
+            handleSnackbarMsg(result.error);
+            handleSnackbarType('error');
+            return;
+         }
+         
+         onRadioStationsUpdate(result.stations);
       };   
 
       loadRadioStations();
