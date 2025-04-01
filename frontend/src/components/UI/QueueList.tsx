@@ -23,6 +23,7 @@ const QueueList: FC<IQueueListProps> = ({ queue, handleSnackbarMsg, handleSnackb
          }
          else {
             setLikedItems(result.stations);
+            console.log('result:', result, 'stations:', result.stations)
          }
       };
 
@@ -30,19 +31,22 @@ const QueueList: FC<IQueueListProps> = ({ queue, handleSnackbarMsg, handleSnackb
    }, []);
 
    const handleLikeButton = async (item: IRadioItem) => {
+      console.log('called')
       let result;
-      let isLiked = likedItems.includes(item);
+      let isLiked = likedItems.some(likedItem => likedItem.id === item.id);
+      console.log(likedItems, item, isLiked)
 
-      if (isLiked) result = await radioService.postFavorites(item.name);
-      else result = await radioService.deleteFavorite(item.name);
+      if (isLiked) result = await radioService.deleteFavorite(item.name);
+      else result = await radioService.postFavorites(item.name);
 
+      console.log(result)
       if (result?.error) {
          handleSnackbarMsg(result.error);
          handleSnackbarType('error');
          return;
       }
 
-      if (isLiked) setLikedItems(prev => [...prev, { ...item }]);
+      if (!isLiked) setLikedItems(prev => [...prev, { ...item }]);
       else setLikedItems(prev => prev.filter(likedItem => likedItem.id !== item.id));
    };
 
@@ -66,15 +70,19 @@ const QueueList: FC<IQueueListProps> = ({ queue, handleSnackbarMsg, handleSnackb
          <div className="queue-list__liked-items">
          <p className="queue-list__title">Избранное радио:</p>
             <ul className='queue-list__list'>
-               {likedItems.map((item) => (
-                  <li key={item.id} className='queue-list__item'>
-                     <p className='queue-list__item-name'>{item.name}</p>
-                     <button
-                        onClick={ () => handleLikeButton(item) }
-                        className={`queue-list__item-button ${likedItems.some(likedItem => likedItem.id === item.id) ? 'queue-list__item-button--liked' : ''}`}
-                     />
-                  </li>
-               ))}
+               {likedItems.length > 0 ? (
+                  likedItems.map((item) => (
+                     <li key={item.id} className='queue-list__item'>
+                        <p className='queue-list__item-name'>{item.name}</p>
+                        <button
+                           onClick={ () => handleLikeButton(item) }
+                           className={`queue-list__item-button ${likedItems.some(likedItem => likedItem.id === item.id) ? 'queue-list__item-button--liked' : ''}`}
+                        />
+                     </li>
+                  ))
+               ) : (
+                  <p>Пока пусто</p>
+               )}
             </ul>
          </div>
       </aside>

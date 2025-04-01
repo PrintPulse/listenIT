@@ -49,7 +49,7 @@ const Casette: FC<ICasetteProps> = ({ children, isPlaying, currentTrack, onRadio
       <>
          <main className='main' test-dataid='main'>
             <div className="main__top">
-                  <h2 className="main__title">listen!</h2>
+               <h2 className="main__title">listen!</h2>
             </div>
             <div className="main__bottom" style={{ '--cassette-color': cassetteColor } as React.CSSProperties}>
                <img src={ audocassete } className="main__image" alt='vintage audio cassette tape' draggable={false}/>
