@@ -7,8 +7,11 @@ $yellow-input-bg: #F9F4D2;
     box-sizing: border-box;
 }
 body {
-    font-family: 'Tilda Sans';
+    font-family: 'Manrope', sans-serif;
     overflow: hidden;
+}
+button, input {
+   font-family: 'Manrope', sans-serif;
 }
 .radio-player {
     position: absolute;
