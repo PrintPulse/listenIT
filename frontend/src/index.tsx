@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import './mocks/apiMock';
 import App from './App';
 import { BackgroundProvider } from './context/BackgroundContext';
 import { AuthProvider } from './context/AuthContext';
