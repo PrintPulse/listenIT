@@ -53,10 +53,10 @@ const QueueList: FC<IQueueListProps> = ({ queue, currTrack, handleSnackbarMsg, h
          <div className="queue-list__queue">
             <p className="queue-list__title">Очередь радио:</p>
             <ul className='queue-list__list'>
-               {queue.map((item) => (
+               {queue.slice(0, 20).map((item) => (
                   <li key={item.id} className={'queue-list__item' + (item.source === currTrack ? ' queue-list__item--playing' : '')}>
                      <p className='queue-list__item-position'>{item.id}</p>
-                     <p className='queue-list__item-name'>{item.name}</p>
+                     <p className='queue-list__item-name' title={item.name}>{item.name}</p>
                      <button
                         onClick={ () => handleLikeButton(item) }
                         className={`queue-list__item-button ${likedItems.some(likedItem => likedItem.id === item.id) ? 'queue-list__item-button--liked' : ''}`}
@@ -69,9 +69,9 @@ const QueueList: FC<IQueueListProps> = ({ queue, currTrack, handleSnackbarMsg, h
          <p className="queue-list__title">Избранное радио:</p>
             <ul className='queue-list__list'>
                {likedItems.length > 0 ? (
-                  likedItems.map((item) => (
+                  likedItems.slice(0, 20).map((item) => (
                      <li key={item.id} className='queue-list__item queue-list__item--liked'>
-                        <p className='queue-list__item-name'>{item.name}</p>
+                        <p className='queue-list__item-name' title={item.name}>{item.name}</p>
                         <button
                            onClick={ () => handleLikeButton(item) }
                            className={`queue-list__item-button ${likedItems.some(likedItem => likedItem.id === item.id) ? 'queue-list__item-button--liked' : ''}`}
