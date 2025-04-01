@@ -8,7 +8,9 @@ interface IAuthContext {
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
 const AuthProvider: FC<{ children: ReactNode}> = ({ children }) => {
-   const [isAuthed, setIsAuthed] = useState<boolean>(false);
+   const [isAuthed, setIsAuthed] = useState<boolean>(() => {
+      return localStorage.getItem('token') !== null;
+   });
 
    return (
       <AuthContext.Provider value={{ isAuthed, setIsAuthed }}>

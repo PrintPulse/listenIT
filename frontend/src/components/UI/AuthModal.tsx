@@ -1,11 +1,12 @@
 import React, { FC, FormEvent, useState, useContext, act } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { loginUser, registerUser, resetPassStep1, resetPassStep2 } from '../../services/authService';
-import Snackbar from './Snackbar';
 import './AuthModal.scss';
 
 type AuthModalProps = {
    onSuccess: () => void;
+   handleSnackbarMsg: (snackbarMsg: string) => void;
+   handleSnackbarType: (snackbarType: "error" | "success" | null) => void;
 };
 
 type AuthStep = {
@@ -22,7 +23,7 @@ const authSteps: AuthStep[] = [
    { title: 'Сброс пароля', inputs: [{ type: 'password', placeholder: 'Новый пароль' }], buttonText: 'Сбросить пароль', switchText: 'Вспомнили пароль? Войти в систему' }
 ];
 
-const AuthModal: FC<AuthModalProps> = ({ onSuccess }) => {
+const AuthModal: FC<AuthModalProps> = ({ onSuccess, handleSnackbarMsg, handleSnackbarType }) => {
    const { setIsAuthed } = useContext(AuthContext) || { setIsAuthed: () => {} };    
    const [currStepIndex, setCurrStepIndex] = useState<number>(0);
    const [email, setEmail] = useState<string>('');
@@ -61,61 +62,62 @@ const AuthModal: FC<AuthModalProps> = ({ onSuccess }) => {
       try {
          let response;
          if (currStepIndex === 0) { //регистрация
-               response = await registerUser(email, password);
-   
-               if (response?.is_active) {
-                  setActionStatus('Вы успешно зарегистрированы, войдите в аккаунт');
-               }
-               else if (response?.error) {
-                  setErrorResponseInfo(response.error);
-               }
+            response = await registerUser(email, password);
+
+            if (response?.is_active) {
+               setActionStatus('Вы успешно зарегистрированы, войдите в аккаунт');
+            }
+            else if (response?.error) {
+               setErrorResponseInfo(response.error);
+            }
          }
          else if (currStepIndex === 1) { //авторизация
-               response = await loginUser(email, password);
-   
-               if (response?.access_token) {
-                  localStorage.setItem('token', response.access_token);
-                  setIsAuthed(true);
-                  setActionStatus('Вы успешно авторизованы');
-                  onSuccess();
-               }
-               else if (response?.error) {
-                  setErrorResponseInfo(response.error);
-               }
+            response = await loginUser(email, password);
+
+            if (response?.access_token) {
+               localStorage.setItem('token', response.access_token);
+               setIsAuthed(true);
+               handleSnackbarMsg('Вы успешно авторизованы');
+               handleSnackbarType('success');
+               onSuccess();
+            }
+            else if (response?.error) {
+               setErrorResponseInfo(response.error);
+            }
          }
          else if (currStepIndex === 2) {//сброс 1
-               response = await resetPassStep1(email);
-   
-               if (response?.token) {
-                  setCurrStepIndex(3);
-                  localStorage.setItem('token-reset', response.token);
-                  setActionStatus('Успех, перейдите к следующему этапу');
-               }
-               else if (response?.error) {
-                  setErrorResponseInfo(response.error);
-               }
+            response = await resetPassStep1(email);
+
+            if (response?.token) {
+               setCurrStepIndex(3);
+               localStorage.setItem('token-reset', response.token);
+               setActionStatus('Успех, перейдите к следующему этапу');
+            }
+            else if (response?.error) {
+               setErrorResponseInfo(response.error);
+            }
          }
          else if (currStepIndex === 3) {//сброс 2
-               const tokenReset = localStorage.getItem('token-reset');
+            const tokenReset = localStorage.getItem('token-reset');
 
-               if (tokenReset) {
-                  const response = await resetPassStep2(tokenReset, password);
+            if (tokenReset) {
+               const response = await resetPassStep2(tokenReset, password);
 
-                  if (Object.keys(response).length === 0) {
-                     setActionStatus('Ваш пароль успешно обновлён');
-                     localStorage.removeItem('token-reset');
-                  }
-                  else if (response?.details) {
-                     setErrorResponseInfo(response.details);
-                  }
+               if (Object.keys(response).length === 0) {
+                  setActionStatus('Ваш пароль успешно обновлён');
+                  localStorage.removeItem('token-reset');
                }
-               else {
-                  throw new Error('ошибка, пользователь пропустил этап сброса пароля');
+               else if (response?.details) {
+                  setErrorResponseInfo(response.details);
                }
+            }
+            else {
+               throw new Error('ошибка, пользователь пропустил этап сброса пароля');
+            }
          }
       }
       catch (err) {
-         throw new Error('произошла ошибка');
+         throw new Error('произошла ошибка', err as Error);
       }
       finally {
          setIsLoading(false);
@@ -144,7 +146,7 @@ const AuthModal: FC<AuthModalProps> = ({ onSuccess }) => {
                      <p>{errorResponseInfo}</p>
                   }
                   {actionStatus &&
-                     <Snackbar type='success' message={actionStatus} />
+                     <p>{actionStatus}</p>
                   }
                   {currStepIndex === 1 &&
                      <button onClick={ () => setCurrStepIndex(2) } type='submit' className="auth-modal__button--reset">Забыли пароль? Восстановить пароль</button>
