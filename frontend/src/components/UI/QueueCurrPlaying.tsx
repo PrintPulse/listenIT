@@ -19,7 +19,7 @@ const QueueCurrPlaying: FC<IQueueCurrPlayingProps> = ({ isPlaying, onPlayingChan
 
    useEffect(() => {
       if (queueList.length > 0) {
-         onTrackChange(queueList[currIndex].name);
+         onTrackChange(queueList[currIndex].source);
       }
    }, [queueList, currIndex, onTrackChange]);
 

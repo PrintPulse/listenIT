@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect } from 'react';
+import React, { FC, ReactNode, useState, useEffect } from 'react';
 import { IRadioItem } from '../../types';
 import { radioService } from '../../services/radioService';
 import audocassete from '../../images/audiocassete.png';
@@ -8,13 +8,13 @@ interface ICasetteProps {
    children: ReactNode;
    isPlaying: boolean;
    currentTrack?: string;
-   radioStations: IRadioItem[];
    onRadioStationsUpdate: (stations: IRadioItem[]) => void;
    handleSnackbarMsg: (snackbarMsg: string) => void;
    handleSnackbarType: (snackbarType: "error" | "success" | null) => void;
 };
 
-const Casette: FC<ICasetteProps> = ({ children, isPlaying, currentTrack, radioStations, onRadioStationsUpdate, handleSnackbarMsg, handleSnackbarType }) => {
+const Casette: FC<ICasetteProps> = ({ children, isPlaying, currentTrack, onRadioStationsUpdate, handleSnackbarMsg, handleSnackbarType }) => {
+   const [cassetteColor, setCassetteColor] = useState<string>('#ffffff');
 
    useEffect(() => {
       const loadRadioStations = async () => {
@@ -32,14 +32,18 @@ const Casette: FC<ICasetteProps> = ({ children, isPlaying, currentTrack, radioSt
       loadRadioStations();
    }, []);
 
+   useEffect(() => {
+      if (currentTrack) {
+         setCassetteColor(getColorFromTrack(currentTrack));
+      }
+   }, [currentTrack]);
+
    const getColorFromTrack = (track: string | undefined) => {
       if (!track) return '#ffffff';
       const hash = track.split('').reduce((acc, char) => char.charCodeAt(0) + acc, 0);
       const hue = hash % 360;
       return `hsl(${hue}, 70%, 50%)`;
    };
-
-   const cassetteColor = getColorFromTrack(currentTrack);
 
    return (
       <>
