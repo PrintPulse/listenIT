@@ -6,15 +6,18 @@ const Snackbar: FC<ISnackbarMsg> = ({ type, message }) => {
    const [visible, setVisible] = useState(true);
 
    useEffect(() => {
-      const timer = setTimeout(() => {
-         setVisible(false);
-      }, 2500);
-
-      return () => clearTimeout(timer);
+      if (type !== null && message) {
+         setVisible(true);
+         const timer = setTimeout(() => {
+            setVisible(false);
+         }, 2500);
+         return () => clearTimeout(timer);
+      }
    }, [type, message]);
-
-   if (!visible) return null;
-   else if (type === null) return null;
+   
+   if (!visible || type === null) {
+      return null;
+   }
 
    return (
       <div className='snackbar'>
