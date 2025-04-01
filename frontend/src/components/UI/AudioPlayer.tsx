@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect, useRef } from "react";
+import './AudioPlayer.scss';
 
 interface IAudioPlayerProps {
    streamUrl: string;

@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect, useContext } from 'react';
 import { BackgroundContext } from '../../context/BackgroundContext';
 import AudioPlayer from './AudioPlayer';
 import { IRadioItem } from '../../types';
+import './QueueCurrPlaying.scss';
 
 interface IQueueCurrPlayingProps {
    isPlaying: boolean;
