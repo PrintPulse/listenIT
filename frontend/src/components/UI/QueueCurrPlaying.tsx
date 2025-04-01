@@ -61,7 +61,7 @@ const QueueCurrPlaying: FC<IQueueCurrPlayingProps> = ({ isPlaying, onPlayingChan
             <h3 className='queue__title'>Сейчас играет:</h3>
             {currRadio ? (
                <div className='queue__curr-playing__item'>
-                  <p className='queue__curr-playing__url'>{currRadio.source}</p>
+                  <p className='queue__curr-playing__url'>{currRadio.name}</p>
                   <AudioPlayer streamUrl={currRadio.source} isPlaying={isPlaying} onPlayingChange={onPlayingChange}/>
                </div>
             ) : (

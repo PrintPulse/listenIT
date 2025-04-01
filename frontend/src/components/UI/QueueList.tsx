@@ -5,11 +5,12 @@ import './QueueList.scss';
 
 interface IQueueListProps {
    queue: IRadioItem[];
+   currTrack: string;
    handleSnackbarMsg: (snackbarMsg: string) => void;
    handleSnackbarType: (snackbarType: "error" | "success" | null) => void;
 };
 
-const QueueList: FC<IQueueListProps> = ({ queue, handleSnackbarMsg, handleSnackbarType }) => {
+const QueueList: FC<IQueueListProps> = ({ queue, currTrack, handleSnackbarMsg, handleSnackbarType }) => {
    const [likedItems, setLikedItems] = useState<IRadioItem[]>([]);
 
    useEffect(() => {
@@ -31,15 +32,12 @@ const QueueList: FC<IQueueListProps> = ({ queue, handleSnackbarMsg, handleSnackb
    }, []);
 
    const handleLikeButton = async (item: IRadioItem) => {
-      console.log('called')
       let result;
       let isLiked = likedItems.some(likedItem => likedItem.id === item.id);
-      console.log(likedItems, item, isLiked)
 
       if (isLiked) result = await radioService.deleteFavorite(item.name);
       else result = await radioService.postFavorites(item.name);
 
-      console.log(result)
       if (result?.error) {
          handleSnackbarMsg(result.error);
          handleSnackbarType('error');
@@ -56,7 +54,7 @@ const QueueList: FC<IQueueListProps> = ({ queue, handleSnackbarMsg, handleSnackb
             <p className="queue-list__title">Очередь радио:</p>
             <ul className='queue-list__list'>
                {queue.map((item) => (
-                  <li key={item.id} className='queue-list__item'>
+                  <li key={item.id} className={'queue-list__item' + (item.source === currTrack ? ' queue-list__item--playing' : '')}>
                      <p className='queue-list__item-position'>{item.id}</p>
                      <p className='queue-list__item-name'>{item.name}</p>
                      <button
@@ -72,7 +70,7 @@ const QueueList: FC<IQueueListProps> = ({ queue, handleSnackbarMsg, handleSnackb
             <ul className='queue-list__list'>
                {likedItems.length > 0 ? (
                   likedItems.map((item) => (
-                     <li key={item.id} className='queue-list__item'>
+                     <li key={item.id} className='queue-list__item queue-list__item--liked'>
                         <p className='queue-list__item-name'>{item.name}</p>
                         <button
                            onClick={ () => handleLikeButton(item) }
@@ -81,7 +79,7 @@ const QueueList: FC<IQueueListProps> = ({ queue, handleSnackbarMsg, handleSnackb
                      </li>
                   ))
                ) : (
-                  <p>Пока пусто</p>
+                  <p className='queue-list__list-empty'>Пока пусто</p>
                )}
             </ul>
          </div>
