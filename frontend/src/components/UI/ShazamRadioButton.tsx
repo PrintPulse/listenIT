@@ -17,8 +17,8 @@ const ShazamRadioButton: FC<IShazamRadioButtonProps> = ({ handleSnackbarMsg, han
          
          if (token) {
             const postShazamRadio = async (token: string) => {
-               await new Promise(resolve => setTimeout(resolve, 5000));
-               
+               await new Promise(resolve => setTimeout(resolve, 3000));
+   
                try {
                   const response = await shazamRadio.recognize(currentRadioUrl, token);
                   if (response.message) {
