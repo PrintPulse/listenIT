@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 from mixer.backend.sqlalchemy import Mixer as _mixer
+from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
@@ -40,6 +41,6 @@ async def init_db():
 
 @pytest.fixture
 def mixer():
-    mixer_engine = create_async_engine(SQLALCHEMY_URL_DB)
+    mixer_engine = create_engine(SQLALCHEMY_URL_DB)
     get_sync_session = sessionmaker(mixer_engine)
     return _mixer(session=get_sync_session(), commit=True)

@@ -1,4 +1,5 @@
 import pytest
+from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
 from app.core.db import get_async_session
@@ -31,9 +32,14 @@ def user_client():
 
 @pytest.fixture
 def anonym_client():
+    def raise_forbidden():
+        raise HTTPException(
+            status_code=401, detail="Пользователь не авторизован!"
+        )
+
     app.dependency_overrides = {}
     app.dependency_overrides[get_async_session] = override_db
-    app.dependency_overrides[current_user] = lambda: anonym_user
+    app.dependency_overrides[current_user] = lambda: raise_forbidden()
 
     with TestClient(app) as client:
         yield client
