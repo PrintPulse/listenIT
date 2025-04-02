@@ -54,3 +54,14 @@
     }
  }
  
+ @media (max-width: 1358px) {
+    .queue__curr-playing__controller {
+       width: 463px;
+       left: -69px;
+    }
+    .queue__title {
+       margin-top: 7px;
+       margin-bottom: 3px;
+    }
+ }
+ 
