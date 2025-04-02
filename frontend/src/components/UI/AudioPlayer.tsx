@@ -6,14 +6,12 @@ interface IAudioPlayerProps {
    streamUrl: string;
    isPlaying: boolean;
    onPlayingChange: (isPlaying: boolean) => void;
-   onShazamDetect?: () => void;
    handleSnackbarMsg: (snackbarMsg: string) => void;
    handleSnackbarType: (snackbarType: "error" | "success" | null) => void;
 };
 
-const AudioPlayer: FC<IAudioPlayerProps> = ({ streamUrl, isPlaying, onPlayingChange, onShazamDetect, handleSnackbarMsg, handleSnackbarType }) => {
+const AudioPlayer: FC<IAudioPlayerProps> = ({ streamUrl, isPlaying, onPlayingChange, handleSnackbarMsg, handleSnackbarType }) => {
    const [volume, setVolume] = useState<number>(0.5);
-   const [isShazamActive, setIsShazamActive] = useState<boolean>(false);
    const audioRef = useRef<HTMLAudioElement>(null);
 
    useEffect(() => {
@@ -61,14 +59,6 @@ const AudioPlayer: FC<IAudioPlayerProps> = ({ streamUrl, isPlaying, onPlayingCha
       }
    }, [isPlaying]);
 
-   const handleShazamClick = () => {
-      setIsShazamActive(true);
-      if (onShazamDetect) {
-         onShazamDetect();
-         setTimeout(() => setIsShazamActive(false), 3000);
-      }
-   };
-
    return (
       <div className="audio-container" data-testid='audio-container'>
          <audio ref={audioRef} className="queue__curr-playing__audio" data-testid='audio-element'/>
@@ -79,7 +69,7 @@ const AudioPlayer: FC<IAudioPlayerProps> = ({ streamUrl, isPlaying, onPlayingCha
                aria-label={`${isPlaying ? 'pause' : 'play'}`}
                data-testid='play-button'
             />
-            <ShazamRadioButton isActive={isShazamActive} onClick={handleShazamClick} />
+            <ShazamRadioButton handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType} currentRadioUrl={streamUrl}/>
             <div 
                className="audio-controls__volume-control"
                style={{ '--rotation': volume * 180 - 90 } as React.CSSProperties}
