@@ -54,6 +54,10 @@ const QueueCurrPlaying: FC<IQueueCurrPlayingProps> = ({ isPlaying, onPlayingChan
       }
    };
 
+   const handleShazamDetection = () => {
+      console.log("Shazam detection triggered");
+   };
+
    const currRadio = queueList[currIndex];
 
    return (
@@ -63,7 +67,7 @@ const QueueCurrPlaying: FC<IQueueCurrPlayingProps> = ({ isPlaying, onPlayingChan
             {currRadio ? (
                <div className='queue__curr-playing__item'>
                   <p className='queue__curr-playing__name' title={currRadio.name}>{currRadio.name}</p>
-                  <AudioPlayer streamUrl={currRadio.source} isPlaying={isPlaying} onPlayingChange={onPlayingChange}/>
+                  <AudioPlayer streamUrl={currRadio.source} isPlaying={isPlaying} onPlayingChange={onPlayingChange} onShazamDetect={handleShazamDetection} handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType} />
                </div>
             ) : (
                <p className='queue__curr-playing__warning'>Нет текущей станции</p>

@@ -46,6 +46,9 @@ const AuthModal: FC<AuthModalProps> = ({ onSuccess, handleSnackbarMsg, handleSna
       else if (currStepIndex === 2) {
          setCurrStepIndex(1);
       }
+      else if (currStepIndex === 3) {
+         setCurrStepIndex(1);
+      }
    };
 
    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, inputType: 'email' | 'password') => {
@@ -116,8 +119,12 @@ const AuthModal: FC<AuthModalProps> = ({ onSuccess, handleSnackbarMsg, handleSna
             }
          }
       }
-      catch (err) {
-         throw new Error('произошла ошибка', err as Error);
+      catch (err: unknown) {
+         let errorMessage: string;
+         if (err instanceof Error) errorMessage = err.message;
+         else errorMessage = String(err);
+  
+         handleSnackbarMsg(`Ошибка:, ${errorMessage}`);
       }
       finally {
          setIsLoading(false);

@@ -39,7 +39,12 @@ const MainPage: FC = () => {
          }
       };
       
-      checkAuth();
+      checkAuth().catch(() => {
+         localStorage.removeItem('token');
+         setIsAuthed(false);
+         setLocalIsAuthed(false); 
+         setAuthModalOpen(true);
+      });
    }, [setIsAuthed]);
 
    useEffect(() => {

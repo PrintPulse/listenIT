@@ -24,7 +24,6 @@ const QueueList: FC<IQueueListProps> = ({ queue, currTrack, handleSnackbarMsg, h
          }
          else {
             setLikedItems(result.stations);
-            console.log('result:', result, 'stations:', result.stations)
          }
       };
 
