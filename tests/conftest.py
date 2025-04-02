@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 
 from app.core.base import Base
 
-pytest_plugins = ["fixtures.user", "fixtures.data"]
+pytest_plugins = ["tests.fixtures.user", "tests.fixtures.data"]
 
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
