@@ -22,7 +22,7 @@ const QueueList: FC<IQueueListProps> = ({ queue, currTrack, handleSnackbarMsg, h
             handleSnackbarType('error');
             return;
          }
-         else {
+         else if (result?.stations) {
             setLikedItems(result.stations);
          }
       };
