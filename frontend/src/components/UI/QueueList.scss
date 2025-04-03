@@ -2,6 +2,8 @@ $color-green-aside-bg: rgba(133, 163, 127, 0.3);
 $color-green-aside-bg-hover: rgba(133, 163, 127, 0.5);
 $color-green-item-playing: rgba(110, 138, 104, 0.3);
 
+
+
 .queue-list {
    display: flex;
    flex-direction: column;
@@ -36,6 +38,22 @@ $color-green-item-playing: rgba(110, 138, 104, 0.3);
       display: flex;
       flex-direction: column;
       padding: 15px 0;
+      max-height: 45dvh;
+      overflow: auto;
+      &::-webkit-scrollbar {
+         width: 8px;
+      }
+      &::-webkit-scrollbar-track {
+         background: rgba(133, 163, 127, 0.1);
+      }
+      &::-webkit-scrollbar-thumb {
+         background: rgba(133, 163, 127, 0.5);
+         border-radius: 4px;
+         
+         &:hover {
+            background: rgba(133, 163, 127, 0.7);
+         }
+      }
 
       &-empty {
          text-align: center;
