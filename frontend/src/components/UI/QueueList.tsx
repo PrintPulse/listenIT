@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { radioService } from '../../services/radioService';
 import { IRadioItem } from '../../types';
-import './QueueList.scss';
+import './QueueList.css';
 
 interface IQueueListProps {
    queue: IRadioItem[];

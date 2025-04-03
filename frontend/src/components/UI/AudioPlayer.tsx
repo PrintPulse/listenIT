@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, useRef } from "react";
 import ShazamRadioButton from "./ShazamRadioButton";
-import './AudioPlayer.scss';
+import './AudioPlayer.css';
 
 interface IAudioPlayerProps {
    streamUrl: string;

@@ -2,7 +2,7 @@ import React, { FC, ReactNode, useState, useEffect } from 'react';
 import { IRadioItem } from '../../types';
 import { radioService } from '../../services/radioService';
 import audiocasette from '../../images/audiocasette.png';
-import './Casette.scss';
+import './Casette.css';
 
 interface ICasetteProps {
    children: ReactNode;

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import ErrorPage from './pages/ErrorPage';
-import './App.scss';
+import './App.css';
 
 const App: FC = () => {
    return (
