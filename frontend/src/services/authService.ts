@@ -112,6 +112,7 @@ const resetPassStep1 = async (email: string) => {
 };
 
 const resetPassStep2 = async (token: string, password: string) => {
+
    try {
       const response = await axios.post('http://localhost:8000/auth/reset-password', 
          { token: token, password: password }, 
