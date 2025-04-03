@@ -1,110 +1,91 @@
-import React, { FC, useState, useCallback, useContext, useEffect } from 'react';
+import React, { FC, useState, useContext, useEffect } from 'react';
 import Circles from '../components/layout/Circles';
 import Casette from '../components/UI/Casette';
-import { Upload } from 'lucide-react';
-import { RadioPlayer } from '../components/UI/RadioPlayer';
-import { StationList } from '../components/UI/StationList';
-import type { RadioStation, RadioState } from '../types';
 import { AuthContext } from '../context/AuthContext';
 import { isUserAuthed } from '../services/authService';
 import AuthModal from '../components/UI/AuthModal';
+import QueueCurrPlaying from '../components/UI/QueueCurrPlaying';
+import QueueList from '../components/UI/QueueList';
+import { IRadioItem } from '../types';
+import Snackbar from '../components/UI/Snackbar';
 
 const MainPage: FC = () => {
-  const currAuthContext = useContext(AuthContext) || { isAuthed: false};
-  const [isAuthed, setIsAuthed] = useState<boolean>(currAuthContext.isAuthed);
-  const [radioState, setRadioState] = useState<RadioState>({
-    currentStation: null,
-    stations: [],
-    isPlaying: false,
-    volume: 0.5,
-  });
+   const { isAuthed: contextIsAuthed, setIsAuthed } = useContext(AuthContext) || { isAuthed: false, setIsAuthed: () => {} };
+   const [isAuthed, setLocalIsAuthed] = useState<boolean>(contextIsAuthed);
+   const [isAuthModalOpen, setAuthModalOpen] = useState<boolean>(!isAuthed);
+   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+   const [currentTrack, setCurrentTrack] = useState<string>('');
+   const [radioStations, setRadioStations] = useState<IRadioItem[]>([]);
+   const [snackbarMsg, setSnackbarMsg] = useState<string>('');
+   const [snackbarType, setSnackbarType] = useState<"error" | "success" | null>(null);
 
-  useEffect(() => {
-    checkUserStatus();
-  }, []);
+   useEffect(() => {
+      const checkAuth = async () => {
+         const token = localStorage.getItem('token');
+         if (token) {
+            const response = await isUserAuthed(token);
 
-  const handleImport = useCallback(() => {
-    const input = document.createElement('input');
+            if (response?.is_active) {
+               setIsAuthed(true);
+               setLocalIsAuthed(true);
+               setAuthModalOpen(false);
+            } 
+            else {
+               localStorage.removeItem('token');
+               setIsAuthed(false);
+               setLocalIsAuthed(false);
+               setAuthModalOpen(true);
+            }
+         }
+      };
+      
+      checkAuth().catch(() => {
+         localStorage.removeItem('token');
+         setIsAuthed(false);
+         setLocalIsAuthed(false); 
+         setAuthModalOpen(true);
+      });
+   }, [setIsAuthed]);
 
-    input.type = 'file';
-    input.accept = '.json';
-    input.onchange = async (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (file) {
-        const text = await file.text();
+   useEffect(() => {
+      setLocalIsAuthed(contextIsAuthed);
+   }, [contextIsAuthed]);
 
-        try {
-          const imported = JSON.parse(text);
-          setRadioState(prev => ({
-            ...prev,
-            stations: [...prev.stations, ...imported]
-          }));
-        } 
-        catch (err) {
-          alert('Invalid JSON file');
-        }
-      }
-    };
-    input.click();
-  }, []);
+   const handleAuthSuccess = () => {
+      setAuthModalOpen(false);
+   };
 
-  const handleSelectStation = (station: RadioStation) => {
-    setRadioState(prev => ({
-      ...prev,
-      currentStation: station,
-      isPlaying: true
-    }));
-  };
+   const handleSnackbarMsg = (msg: string) => {
+      setSnackbarMsg(msg);
+   };
 
-  const checkUserStatus = async () => {
-    const token = localStorage.getItem('token');
+   const handleSnackbarType = (type: "error" | "success" | null) => {
+      setSnackbarType(type);
+   };
 
-    if (token) {
-      isUserAuthed(token)
-        .then(() => setIsAuthed(true))
-        .catch(error => { setIsAuthed(false); throw new Error(`${error.messsage}`) })
-    }
-    else {
-      setIsAuthed(false);
-    }
-  };
-  
-  return (
-    <>
-        <Circles />
-        <div>
-          <button onClick={handleImport} className="button--import">
-            <Upload size={20} />
-            Import Stations
-          </button>
-        </div>
-        <div>
-        {radioState.stations.length === 0 ? (
-          <div className="">
-            <p className="">No radio stations added yet</p>
-            <p>Import your stations using the button above</p>
-          </div>
-        ) : (
-          <StationList
-            stations={radioState.stations}
-            currentStation={radioState.currentStation}
-            onSelectStation={handleSelectStation}
-          />
-        )}
-        </div>
-        <RadioPlayer
-          station={radioState.currentStation}
-          isPlaying={radioState.isPlaying}
-          volume={radioState.volume}
-          onPlayPause={() => setRadioState(prev => ({ ...prev, isPlaying: !prev.isPlaying }))}
-          onVolumeChange={(volume) => setRadioState(prev => ({ ...prev, volume }))}
-        />
-        <Casette />
-        {!isAuthed &&
-          <AuthModal />
-        }
-    </>
-  )
-}
+   return (
+      <>
+         <div className='container'>
+            <Circles />
+            {currentTrack &&
+               <QueueList queue={radioStations} currTrack={currentTrack} handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType} />
+            }
+            {!isAuthed && isAuthModalOpen &&
+               <AuthModal onSuccess={handleAuthSuccess} handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType} />
+            }
+            {isAuthed &&
+               <Casette isPlaying={isPlaying} currentTrack={currentTrack} onRadioStationsUpdate={setRadioStations}
+                  handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType}
+               >
+                  <QueueCurrPlaying isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack} onTrackChange={setCurrentTrack} 
+                     queueList={radioStations} handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType}
+                  />
+               </Casette>
+            }
+         </div>
+         <Snackbar type={snackbarType} message={snackbarMsg} />
+      </>
+   );
+};
 
 export default MainPage;

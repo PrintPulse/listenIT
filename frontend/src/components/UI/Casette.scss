@@ -1,6 +1,7 @@
 $yellow-input-bg: #F9F4D2;
 $gray-input-border: #C2C2C2;
 $gray-text: #949494;
+$red-color: #ff0000;
 
 .main {
     display: flex;
@@ -17,12 +18,18 @@ $gray-text: #949494;
         width: 100%;
         max-width: 640px;
         position: relative;
+        transition: box-shadow 0.5s ease;
+
+        &:hover {
+         box-shadow: 0 0 20px var(--cassette-color);
+      }
     }
     &__inner {
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 11px;
+        max-width: 400px;
         position: absolute;
         top: 45%;
         left: 50%;
@@ -34,18 +41,17 @@ $gray-text: #949494;
     &__image {
         width: 100%;
         height: 100%;
-        max-width: 640px;
-        max-height: 407px;
+        filter: drop-shadow(0 0 5px var(--cassette-color));
     }
     &__input {
         border: 1px solid $gray-input-border;
-        border-radius: 50px;
+        border-radius: 30px;
         background-color: $yellow-input-bg;
         font-size: 1.75rem;
         padding: 0 18px 0 31px;
         width: 59.375dvw;
-        height: 105px;
-        max-width: 380px;
+        height: 95px;
+        max-width: 190px;
 
         &-container {
             position: relative;
@@ -62,6 +68,7 @@ $gray-text: #949494;
         left: 31px;
         transform: translateY(-50%);
         transition: all 0.3s ease;
+        cursor: text;
 
         &.transparent {
             opacity: 0.7;
@@ -69,20 +76,87 @@ $gray-text: #949494;
         &.invisible {
             display: none;
         }
-    }
-    &__button {
-        background: url('../../images/arrow-left.png') no-repeat center center;
-        background-size: cover;
-        border: 0;
-        width: 100dvw;
-        max-width: 74px;
-        height: 52px;
+      }
+    &__reel {
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      background: url('../../images/reel.png') no-repeat center;
+      background-size: contain;
+      z-index: 1;
+      transform: translate(-50%, -50%);
 
-        &--next {
-            transform: rotateY(180deg);
-        }
-        &:hover {
-            cursor: pointer;
-        }
+      &--left {
+         top: 140px;
+         left: 21.5%;
+      }
+      &--right {
+         top: 140px;
+         right: 21.5%;
+      }
+      &--left:not(.spin) {
+         top: 185px;
+         left: 28.6%;
+      }
+      &--right:not(.spin) {
+         top: 185px;
+         right: 14.5%;
+      }
+      &.spin {
+         animation: spin 2s linear infinite;
+      }
     }
+}
+
+.main--error {
+   text-align: center;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translateY(-50%) translateX(-50%);
+
+   &__title {
+       font-size: 2.5rem;
+       color: $red-color;
+   }
+   &__link {
+       font-size: 1.5rem;
+       color: $red-color;
+   }
+}
+
+@keyframes spin {
+   from { transform: rotate(0deg); }
+   to { transform: rotate(360deg); }
+}
+
+@media (max-width: 1358px) {
+   .main {
+      left: 65%;
+
+      &__title {
+         font-size: 7rem;
+      }
+      &__bottom {
+         width: 520px;
+         height: 360px;
+      }
+      &__reel {
+         width: 75px;
+         height: 75px;
+
+         &--right {
+            top: 125.5px;
+         }
+         &--right:not(.spin) {
+            top: 162.5px;
+         }
+         &--left {
+            top: 125.5px;
+         }
+         &--left:not(.spin) {
+            top: 162.5px;
+         }
+      }
+   }
 }
