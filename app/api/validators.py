@@ -49,3 +49,17 @@ async def check_favorite_exists(
                 detail=f"Радио {radio.name} не было добавлено в избранное!",
             )
         return obj
+
+
+async def check_url_exists(radio_url: str, session: AsyncSession):
+    obj = (
+        (await session.execute(select(Radio).where(Radio.source == radio_url)))
+        .scalars()
+        .first()
+    )
+    if obj is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Адреса {radio_url} не существует!",
+        )
+    return obj

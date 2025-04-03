@@ -15,6 +15,11 @@ async def match_fingerprint(duration: int, fingerprint: str):
         }
         async with session.get(ACOUST_URL, params=QUERIES) as response:
             response_dict = await response.json()
-            result = response_dict["results"][0]["recordings"][0]
+            try:
+                result = response_dict["results"][0]["recordings"][0]
+            except IndexError:
+                result = {
+                    "message": "К сожалению, мы пока не знаем такого трека"
+                }
 
     return result
