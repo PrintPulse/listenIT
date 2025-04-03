@@ -1,5 +1,4 @@
-$color-green-success: #A5D6A7;
-$color-red-error: #EF9A9A;
+@use '../../variables' as v;
 
 .snackbar {
    position: absolute;
@@ -14,8 +13,8 @@ $color-red-error: #EF9A9A;
       position: relative;
 
       &--error {
-         border: 1px solid $color-red-error;
-         background-color: $color-red-error;
+         border: 1px solid v.$color-red-error;
+         background-color: v.$color-red-error;
 
          &::before {
             content: '';
@@ -27,8 +26,8 @@ $color-red-error: #EF9A9A;
          }
       }
       &--success {
-         border: 1px solid $color-green-success;
-         background-color: $color-green-success;
+         border: 1px solid v.$color-green-success;
+         background-color: v.$color-green-success;
 
          &::before {
             content: '';

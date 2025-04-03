@@ -1,7 +1,4 @@
-$yellow-input-bg: #F9F4D2;
-$gray-input-border: #C2C2C2;
-$gray-text: #949494;
-$red-color: #ff0000;
+@use '../../variables' as v;
 
 .main {
     display: flex;
@@ -44,9 +41,9 @@ $red-color: #ff0000;
         filter: drop-shadow(0 0 5px var(--cassette-color));
     }
     &__input {
-        border: 1px solid $gray-input-border;
+        border: 1px solid v.$gray-input-border;
         border-radius: 30px;
-        background-color: $yellow-input-bg;
+        background-color: v.$yellow-input-bg;
         font-size: 1.75rem;
         padding: 0 18px 0 31px;
         width: 59.375dvw;
@@ -62,7 +59,7 @@ $red-color: #ff0000;
     }
     &__label {
         font-size: 1.6rem;
-        color: $gray-text;
+        color: v.$gray-text;
         position: absolute;
         top: 50%;
         left: 31px;
@@ -117,11 +114,11 @@ $red-color: #ff0000;
 
    &__title {
        font-size: 2.5rem;
-       color: $red-color;
+       color: v.$red-color;
    }
    &__link {
        font-size: 1.5rem;
-       color: $red-color;
+       color: v.$red-color;
    }
 }
 

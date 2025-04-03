@@ -1,19 +1,7 @@
-$yellow-bg-color: #F9F4D2;
-$green-bg-color: #B8E0B1;
-$circle-colors: (
-    yellow: (
-        #E0DBBD, 
-        #D2CEB1, 
-        #EBE7C9, 
-        #E7E1BA
-    ),
-    green: (
-        #A1CC99, 
-        #A1C39A, 
-        #AED4A6, 
-        #ACCCA5
-    )
-);
+@use "sass:map";
+@use "sass:list";
+@use '../../variables' as *;
+
 .circle-container {
     width: 100dvw;
     height: 100dvh;
@@ -31,18 +19,16 @@ $circle-colors: (
     overflow: hidden;
     position: absolute;
     animation: grow 10s infinite;
-
     @for $i from 0 through 3 {
         &--#{$i} {
             &.circle--green {
-                background-color: nth(map-get($circle-colors, green), $i + 1);
+                background-color: list.nth(map.get($circle-colors, green), $i + 1);
             }
             &.circle--yellow {
-                background-color: nth(map-get($circle-colors, yellow), $i + 1);
+                background-color: list.nth(map.get($circle-colors, yellow), $i + 1);
             }
         }
     }
-
     &--0 {
         width: 34.3175dvw;
         height: 34.3175dvw;
@@ -70,4 +56,4 @@ $circle-colors: (
     100% {
         transform: scale(0.1);
     }
-}   
+}

@@ -1,3 +1,4 @@
+@use '../../variables' as v;
 
 .shazam-button {
    border: 0;
@@ -9,7 +10,7 @@
    }
    &__inner-text {
       font-size: 2rem;
-      color: #fff;
+      color: v.$white;
       position: absolute;
       top: 50%;
       left: 50%;

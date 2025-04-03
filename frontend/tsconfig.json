@@ -19,7 +19,12 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "outDir": "./build"
+    "outDir": "./build",
+    "baseUrl": "src",
+    "paths": {
+      "@styles/*": ["styles/*"]
+    }
   },
-  "include": ["src", "mocks/fileMock.js"]
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/**/__tests__/*"]
 }

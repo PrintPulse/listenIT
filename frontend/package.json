@@ -19,7 +19,7 @@
     "start": "react-scripts start",
     "test": "jest --coverage",
     "eject": "react-scripts eject",
-    "build:css": "sass src/styles:src/styles --style compressed",
+    "build:css": "sass src/styles:src/styles --style compressed --no-source-map",
     "build:prod": "webpack --mode production",
     "prebuild": "npm run build:css",
     "build": "react-scripts build"

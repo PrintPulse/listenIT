@@ -1,8 +1,4 @@
-$color-green-aside-bg: rgba(133, 163, 127, 0.3);
-$color-green-aside-bg-hover: rgba(133, 163, 127, 0.5);
-$color-green-item-playing: rgba(110, 138, 104, 0.3);
-
-
+@use '../../variables' as v;
 
 .queue-list {
    display: flex;
@@ -16,15 +12,15 @@ $color-green-item-playing: rgba(110, 138, 104, 0.3);
    max-height: 95dvh;
 
    &__queue {
-      background-color: $color-green-aside-bg;
-      border: 1px solid $color-green-aside-bg;
+      background-color: v.$color-green-aside-bg;
+      border: 1px solid v.$color-green-aside-bg;
       border-radius: 16px;
       padding: 15px;
       max-width: 350px;  
    }
    &__liked-items {
-      background-color: $color-green-aside-bg;
-      border: 1px solid $color-green-aside-bg;
+      background-color: v.$color-green-aside-bg;
+      border: 1px solid v.$color-green-aside-bg;
       border-radius: 16px;
       padding: 15px;
       max-width: 350px;  
@@ -70,7 +66,7 @@ $color-green-item-playing: rgba(110, 138, 104, 0.3);
       cursor: pointer;
 
       &:hover {
-         background-color: $color-green-aside-bg-hover;
+         background-color: v.$color-green-aside-bg-hover;
       }
       &--liked {
          justify-content: center;
@@ -99,7 +95,7 @@ $color-green-item-playing: rgba(110, 138, 104, 0.3);
          }
       }
       &--playing {
-         background-color: $color-green-item-playing;
+         background-color: v.$color-green-item-playing;
       }
    }
 }

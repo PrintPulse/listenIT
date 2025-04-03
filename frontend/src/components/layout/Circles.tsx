@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, useContext } from 'react';
 import { BackgroundContext } from '../../context/BackgroundContext';
-import './Circles.scss';
+import './styles/Circles.css';
 
 interface elementsProps {
    id: number;
