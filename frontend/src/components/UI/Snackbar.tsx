@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { ISnackbarMsg } from '../../types';
-import './Snackbar.scss';
+import './Snackbar.css';
 
 const Snackbar: FC<ISnackbarMsg> = ({ type, message }) => {
    const [visible, setVisible] = useState(true);

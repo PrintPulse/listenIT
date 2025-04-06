@@ -1,7 +1,7 @@
 import React, { FC, FormEvent, useState, useContext, act } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { loginUser, registerUser, resetPassStep1, resetPassStep2 } from '../../services/authService';
-import './AuthModal.scss';
+import './AuthModal.css';
 
 type AuthModalProps = {
    onSuccess: () => void;

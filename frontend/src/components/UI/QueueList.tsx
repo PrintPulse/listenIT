@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { radioService } from '../../services/radioService';
 import { IRadioItem } from '../../types';
-import './QueueList.scss';
+import './QueueList.css';
 
 interface IQueueListProps {
    queue: IRadioItem[];
@@ -52,7 +52,7 @@ const QueueList: FC<IQueueListProps> = ({ queue, currTrack, handleSnackbarMsg, h
          <div className="queue-list__queue">
             <p className="queue-list__title">Очередь радио:</p>
             <ul className='queue-list__list'>
-               {queue.slice(0, 20).map((item) => (
+               {queue.map((item) => (
                   <li key={item.id} className={'queue-list__item' + (item.source === currTrack ? ' queue-list__item--playing' : '')}>
                      <p className='queue-list__item-position'>{item.id}</p>
                      <p className='queue-list__item-name' title={item.name}>{item.name}</p>
@@ -68,7 +68,7 @@ const QueueList: FC<IQueueListProps> = ({ queue, currTrack, handleSnackbarMsg, h
          <p className="queue-list__title">Избранное радио:</p>
             <ul className='queue-list__list'>
                {likedItems.length > 0 ? (
-                  likedItems.slice(0, 20).map((item) => (
+                  likedItems.map((item) => (
                      <li key={item.id} className='queue-list__item queue-list__item--liked'>
                         <p className='queue-list__item-name' title={item.name}>{item.name}</p>
                         <button

@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect, useContext } from 'react';
 import { BackgroundContext } from '../../context/BackgroundContext';
 import AudioPlayer from './AudioPlayer';
 import { IRadioItem } from '../../types';
-import './QueueCurrPlaying.scss';
+import './QueueCurrPlaying.css';
 
 interface IQueueCurrPlayingProps {
    isPlaying: boolean;
@@ -52,10 +52,6 @@ const QueueCurrPlaying: FC<IQueueCurrPlayingProps> = ({ isPlaying, onPlayingChan
          handleSnackbarType('error');
          return;
       }
-   };
-
-   const handleShazamDetection = () => {
-      console.log("Shazam detection triggered");
    };
 
    const currRadio = queueList[currIndex];
