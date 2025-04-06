@@ -1,4 +1,4 @@
-import React, { FC, useState, useContext, useEffect } from 'react';
+import React, { FC, useState, useContext, useEffect, useCallback } from 'react';
 import Circles from '../components/layout/Circles';
 import Casette from '../components/UI/Casette';
 import { AuthContext } from '../context/AuthContext';
@@ -15,7 +15,9 @@ const MainPage: FC = () => {
    const [isAuthModalOpen, setAuthModalOpen] = useState<boolean>(!isAuthed);
    const [isPlaying, setIsPlaying] = useState<boolean>(false);
    const [currentTrack, setCurrentTrack] = useState<string>('');
+   const [currentSource, setCurrentSource] = useState<'queue' | 'favorites'>('queue');
    const [radioStations, setRadioStations] = useState<IRadioItem[]>([]);
+   const [likedItems, setLikedItems] = useState<IRadioItem[]>([]);
    const [snackbarMsg, setSnackbarMsg] = useState<string>('');
    const [snackbarType, setSnackbarType] = useState<"error" | "success" | null>(null);
 
@@ -55,6 +57,12 @@ const MainPage: FC = () => {
       setAuthModalOpen(false);
    };
 
+   const handleTrackChange = useCallback((track: string, fromFavorites?: boolean) => {
+      setCurrentTrack(track);
+      setCurrentSource(fromFavorites ? 'favorites' : 'queue');
+      setIsPlaying(true);
+   }, []);
+
    const handleSnackbarMsg = (msg: string) => {
       setSnackbarMsg(msg);
    };
@@ -67,8 +75,8 @@ const MainPage: FC = () => {
       <>
          <div className='container'>
             <Circles />
-            {currentTrack &&
-               <QueueList queue={radioStations} currTrack={currentTrack} handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType} />
+            {radioStations &&
+               <QueueList queue={radioStations} currTrack={currentTrack} onTrackChange={handleTrackChange} currentSource={currentSource} handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType} />
             }
             {!isAuthed && isAuthModalOpen &&
                <AuthModal onSuccess={handleAuthSuccess} handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType} />
@@ -78,7 +86,7 @@ const MainPage: FC = () => {
                   handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType}
                >
                   <QueueCurrPlaying isPlaying={isPlaying} onPlayingChange={setIsPlaying} currentTrack={currentTrack} onTrackChange={setCurrentTrack} 
-                     queueList={radioStations} handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType}
+                     queueList={radioStations} favoritesList={likedItems} currentSource={currentSource} onSourceChange={setCurrentSource} handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType}
                   />
                </Casette>
             }
