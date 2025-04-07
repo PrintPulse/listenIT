@@ -19,6 +19,19 @@ async def check_name_exists(radio_name: str, session: AsyncSession):
     return obj
 
 
+async def check_name_duplicate(radio_name: str, session: AsyncSession):
+    obj = (
+        (await session.execute(select(Radio).where(Radio.name == radio_name)))
+        .scalars()
+        .first()
+    )
+    if obj:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Радио {radio_name} уже существует!",
+        )
+
+
 async def check_favorite_exists(
     user: User, radio: Radio, session: AsyncSession, key: str
 ):

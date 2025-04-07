@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.integrations import match_fingerprint
@@ -10,9 +10,9 @@ from app.services import fragmented
 router = APIRouter()
 
 
-@router.post("/", dependencies=[Depends(current_user)])
+@router.get("/", dependencies=[Depends(current_user)])
 async def recognize(
-    radio_url: str = Body(..., embed=True),
+    radio_url: str,
     session: AsyncSession = Depends(get_async_session),
 ):
     await check_url_exists(radio_url=radio_url, session=session)
