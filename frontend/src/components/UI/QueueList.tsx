@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { radioService } from '../../services/radioService';
 import { IRadioItem } from '../../types';
 import './QueueList.css';
+import AddRadio from './AddRadio';
 
 interface IQueueListProps {
    queue: IRadioItem[];
@@ -69,6 +70,7 @@ const QueueList: FC<IQueueListProps> = ({ queue, currTrack, onTrackChange, curre
                   </li>
                ))}
             </ul>
+            <AddRadio />
          </div>
          <div className="queue-list__liked-items">
          <p className="queue-list__title">Избранное радио:</p>
