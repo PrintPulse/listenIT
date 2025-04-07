@@ -88,7 +88,7 @@ const QueueList: FC<IQueueListProps> = ({ queue, currTrack, onTrackChange, curre
                   </li>
                ))}
             </ul>
-            <AddRadio handleAddNewRadio={handleAddNewRadio} />
+            <AddRadio handleAddNewRadio={handleAddNewRadio} handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType}/>
          </div>
          <div className="queue-list__liked-items">
          <p className="queue-list__title">Избранное радио:</p>
