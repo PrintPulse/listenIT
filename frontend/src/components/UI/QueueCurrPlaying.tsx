@@ -72,6 +72,7 @@ const QueueCurrPlaying: FC<IQueueCurrPlayingProps> = ({ isPlaying, onPlayingChan
 
    return (
       <div className='queue'>
+         <p className="queue-index">{currRadio?.id ?? 0}</p>
          <div className='queue__curr-playing'>
             <h3 className='queue__title'>Сейчас играет:</h3>
             {currRadio ? (
