@@ -99,6 +99,34 @@ class RadioService {
          throw new Error('ошибка, пользователь не авторизован');
       }
    };
+   async addRadio(url: string) {
+      const token = localStorage.getItem('token');
+
+      if (token) {
+         try {
+            // const response = await axios.post(`${this.baseUrl}/favorite`, 
+            //    { url },
+            //    {
+            //       headers: {
+            //          'Authorization': `Bearer ${token}`,
+            //          'Content-Type': 'application/json'
+            //       }
+            //    }
+            // );
+            // return { };
+         }
+         catch (e) {
+            const axiosError = e as any;
+            if (axiosError.response?.data?.detail) {
+               return { error: axiosError.response.data.detail };
+            }
+            return { error: 'ошибка при добавлении радио' };
+         }
+      }
+      else {
+         throw new Error('ошибка, пользователь не авторизован');
+      }
+   }
 };
 
 export const radioService = new RadioService();
