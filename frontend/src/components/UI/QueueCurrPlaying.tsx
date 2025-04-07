@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useContext } from 'react';
+import React, { FC, useState, useEffect, useContext, useMemo, useCallback } from 'react';
 import { BackgroundContext } from '../../context/BackgroundContext';
 import AudioPlayer from './AudioPlayer';
 import { IRadioItem } from '../../types';
@@ -52,60 +52,23 @@ const QueueCurrPlaying: FC<IQueueCurrPlayingProps> = ({ isPlaying, onPlayingChan
 
    const { setIsBgYellow } = bgContext;
 
-   const playNext = () => {
-      if (currentSource === 'queue') {
-         if (currentIndex < queueList.length - 1) {
-            const newIndex = currentIndex + 1;
-            setCurrentIndex(newIndex);
-            onTrackChange(queueList[newIndex].source);
-            setIsBgYellow((prev: boolean) => !prev);
-         } 
-         else {
-            handleSnackbarMsg('Следующих станций нет в очереди');
-            handleSnackbarType('error');
-         }
-      } 
-      else if (currentSource === 'favorites') {
-         if (currentIndex < favoritesList.length - 1) {
-            const newIndex = currentIndex + 1;
-            setCurrentIndex(newIndex);
-            onTrackChange(favoritesList[newIndex].source);
-            setIsBgYellow((prev: boolean) => !prev);
-         } 
-         else {
-            handleSnackbarMsg('Следующих станций нет в избранном');
-            handleSnackbarType('error');
-         }
+   const handleTrackChange = useCallback((direction: 'next' | 'prev') => {
+      const list = currentSource === 'queue' ? queueList : favoritesList;
+      const newIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
+      if (newIndex >= 0 && newIndex < list.length) {
+         setCurrentIndex(newIndex);
+         onTrackChange(list[newIndex].source);
+         setIsBgYellow(prev => !prev);
+      } else {
+         const message = direction === 'next' ? 'Следующих станций нет' : 'Предыдущих станций нет';
+         handleSnackbarMsg(currentSource === 'queue' ? `${message} в очереди` : `${message} в избранном`);
+         handleSnackbarType('error');
       }
-   };
+   }, [currentIndex, currentSource, queueList, favoritesList, onTrackChange, handleSnackbarMsg, handleSnackbarType, setIsBgYellow]);
 
-   const playPrev = () => {
-      if (currentSource === 'queue') {
-         if (currentIndex > 0) {
-            const newIndex = currentIndex - 1;
-            setCurrentIndex(newIndex);
-            onTrackChange(queueList[newIndex].source);
-            setIsBgYellow((prev: boolean) => !prev);
-         } 
-         else {
-            handleSnackbarMsg('Предыдущих станций нет в очереди');
-            handleSnackbarType('error');
-         }
-      } 
-      else if (currentSource === 'favorites') {
-         if (currentIndex > 0) {
-            const newIndex = currentIndex - 1;
-            setCurrentIndex(newIndex);
-            onTrackChange(favoritesList[newIndex].source);
-            setIsBgYellow((prev: boolean) => !prev);
-         } else {
-            handleSnackbarMsg('Предыдущих станций нет в избранном');
-            handleSnackbarType('error');
-         }
-      }
-   };
-
-   const currRadio = currentSource === 'queue' ? queueList[currentIndex] : favoritesList[currentIndex];
+   const currRadio = useMemo(() => {
+      return currentSource === 'queue' ? queueList[currentIndex] : favoritesList[currentIndex];
+   }, [currentSource, currentIndex, queueList, favoritesList]);
 
    return (
       <div className='queue'>
@@ -120,8 +83,8 @@ const QueueCurrPlaying: FC<IQueueCurrPlayingProps> = ({ isPlaying, onPlayingChan
                <p className='queue__curr-playing__warning'>Нет текущей станции</p>
             )}
             <div className='queue__curr-playing__controller'>
-               <button onClick={ playPrev } className='queue__curr-playing__button queue__curr-playing__button--prev'></button>
-               <button onClick={ playNext } className='queue__curr-playing__button queue__curr-playing__button--next'></button>
+               <button onClick={ () => handleTrackChange('prev') } className='queue__curr-playing__button queue__curr-playing__button--prev'></button>
+               <button onClick={ () => handleTrackChange('next') } className='queue__curr-playing__button queue__curr-playing__button--next'></button>
             </div>
          </div>
       </div>
