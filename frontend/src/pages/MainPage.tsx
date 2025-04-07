@@ -76,7 +76,7 @@ const MainPage: FC = () => {
          <div className='container'>
             <Circles />
             {radioStations &&
-               <QueueList queue={radioStations} currTrack={currentTrack} onTrackChange={handleTrackChange} currentSource={currentSource} handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType} />
+               <QueueList queue={radioStations} currTrack={currentTrack} onTrackChange={handleTrackChange} currentSource={currentSource} onRadioStationsUpdate={setRadioStations} handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType} />
             }
             {!isAuthed && isAuthModalOpen &&
                <AuthModal onSuccess={handleAuthSuccess} handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType} />

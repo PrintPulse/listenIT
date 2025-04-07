@@ -9,11 +9,12 @@ interface IQueueListProps {
    currTrack: string;
    onTrackChange: (track: string, fromFavorites?: boolean) => void;
    currentSource: 'queue' | 'favorites';
+   onRadioStationsUpdate: (stations: IRadioItem[]) => void;
    handleSnackbarMsg: (snackbarMsg: string) => void;
    handleSnackbarType: (snackbarType: "error" | "success" | null) => void;
 };
 
-const QueueList: FC<IQueueListProps> = ({ queue, currTrack, onTrackChange, currentSource, handleSnackbarMsg, handleSnackbarType }) => {
+const QueueList: FC<IQueueListProps> = ({ queue, currTrack, onTrackChange, currentSource, handleSnackbarMsg, handleSnackbarType, onRadioStationsUpdate }) => {
    const [likedItems, setLikedItems] = useState<IRadioItem[]>([]);
 
    useEffect(() => {
@@ -32,6 +33,23 @@ const QueueList: FC<IQueueListProps> = ({ queue, currTrack, onTrackChange, curre
 
       loadFavorites();
    }, []);
+
+   const handleAddNewRadio = async (newRadio: IRadioItem) => {
+      try {
+         const updatedQueue = [...queue, newRadio];
+         onRadioStationsUpdate(updatedQueue);
+         
+         handleSnackbarMsg(`Радио "${newRadio.name}" успешно добавлено`);
+         handleSnackbarType('success');
+         
+         onTrackChange(newRadio.source, false);
+      } 
+      catch (error) {
+         handleSnackbarMsg('Ошибка при добавлении радио');
+         handleSnackbarType('error');
+         console.error(error);
+      }
+   };
 
    const handleLikeButton = async (item: IRadioItem) => {
       let result;
@@ -70,7 +88,7 @@ const QueueList: FC<IQueueListProps> = ({ queue, currTrack, onTrackChange, curre
                   </li>
                ))}
             </ul>
-            <AddRadio />
+            <AddRadio handleAddNewRadio={handleAddNewRadio} />
          </div>
          <div className="queue-list__liked-items">
          <p className="queue-list__title">Избранное радио:</p>

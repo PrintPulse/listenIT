@@ -113,14 +113,14 @@ class RadioService {
                   }
                }
             );
-            return { name: response.data, url: response.data, id: response.data };
+            return { id: response.data.id, name: response.data.name, source: response.data.source };
          }
          catch (e) {
             const axiosError = e as any;
             if (axiosError.response?.data?.detail) {
-               return { name: '', url: '', id: '', error: axiosError.response.data.detail };
+               return { id: '', name: '', source: '', error: axiosError.response.data.detail };
             }
-            return { name: '', url: '', id: '', error: 'ошибка при добавлении радио' };
+            return { id: '', name: '', source: '', error: 'ошибка при добавлении радио' };
          }
       }
       else {
