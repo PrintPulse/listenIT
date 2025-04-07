@@ -99,28 +99,28 @@ class RadioService {
          throw new Error('ошибка, пользователь не авторизован');
       }
    };
-   async addRadio(url: string) {
+   async addRadio(name: string, url: string) {
       const token = localStorage.getItem('token');
 
       if (token) {
          try {
-            // const response = await axios.post(`${this.baseUrl}/favorite`, 
-            //    { url },
-            //    {
-            //       headers: {
-            //          'Authorization': `Bearer ${token}`,
-            //          'Content-Type': 'application/json'
-            //       }
-            //    }
-            // );
-            // return { };
+            const response = await axios.post(`${this.baseUrl}/radio`, 
+               { name, source: url },
+               {
+                  headers: {
+                     'Authorization': `Bearer ${token}`,
+                     'Content-Type': 'application/json'
+                  }
+               }
+            );
+            return { name: response.data, url: response.data, id: response.data };
          }
          catch (e) {
             const axiosError = e as any;
             if (axiosError.response?.data?.detail) {
-               return { error: axiosError.response.data.detail };
+               return { name: '', url: '', id: '', error: axiosError.response.data.detail };
             }
-            return { error: 'ошибка при добавлении радио' };
+            return { name: '', url: '', id: '', error: 'ошибка при добавлении радио' };
          }
       }
       else {
