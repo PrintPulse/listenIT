@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { radioService } from 'services/radioService';
 import { IRadioItem } from '../../types';
-import './AddRadio.scss';
+import './AddRadio.css';
 
 interface IAddRadioProps {
    handleAddNewRadio: (newRadio: IRadioItem) => void;
