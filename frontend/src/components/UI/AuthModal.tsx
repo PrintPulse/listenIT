@@ -1,7 +1,7 @@
 import React, { FC, FormEvent, useState, useContext, act } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { loginUser, registerUser, resetPassStep1, resetPassStep2 } from '../../services/authService';
-import './AuthModal.scss';
+import './AuthModal.css';
 
 type AuthModalProps = {
    onSuccess: () => void;
@@ -44,6 +44,9 @@ const AuthModal: FC<AuthModalProps> = ({ onSuccess, handleSnackbarMsg, handleSna
          setCurrStepIndex(0);
       } 
       else if (currStepIndex === 2) {
+         setCurrStepIndex(1);
+      }
+      else if (currStepIndex === 3) {
          setCurrStepIndex(1);
       }
    };
@@ -116,8 +119,12 @@ const AuthModal: FC<AuthModalProps> = ({ onSuccess, handleSnackbarMsg, handleSna
             }
          }
       }
-      catch (err) {
-         throw new Error('произошла ошибка', err as Error);
+      catch (err: unknown) {
+         let errorMessage: string;
+         if (err instanceof Error) errorMessage = err.message;
+         else errorMessage = String(err);
+  
+         handleSnackbarMsg(`Ошибка:, ${errorMessage}`);
       }
       finally {
          setIsLoading(false);

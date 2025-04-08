@@ -20,16 +20,21 @@ const isUserAuthed = async (token: string) => {
    try {
       const response = await axios.get('http://localhost:8000/users/me', {
          headers: {
-               'Authorization': `Bearer ${token}`,
-               'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
          },
       });
 
       return { is_active: response.data.is_active };
    }
    catch (error) {
-      const errorMessage = handleAxiosError(error);
-      return { error: errorMessage };
+      if (axios.isAxiosError(error)) {
+         if (error.response?.status === 401) {
+            return { error: 'неверные данные' };
+         }
+         return { error: error.response?.data?.detail || 'ошибка авторизации' };
+      }
+      return { error: 'ошибка авторизации' };
    }
 };
 
@@ -107,6 +112,7 @@ const resetPassStep1 = async (email: string) => {
 };
 
 const resetPassStep2 = async (token: string, password: string) => {
+
    try {
       const response = await axios.post('http://localhost:8000/auth/reset-password', 
          { token: token, password: password }, 
@@ -117,35 +123,35 @@ const resetPassStep2 = async (token: string, password: string) => {
          }
       );
       
-      return response.data;
+      return response?.data || 'ошибка, попробуйте ещё раз';
    }
    catch (error) {
-      const axiosError = error as AxiosError;
+      const axiosError = error as AxiosError<IErrorResponse>;
 
       if (axiosError.response) {
          let errorMessage;
 
          if (axiosError.response.status === 400) {
-               handleAxiosError(error);
+            handleAxiosError(error);
          } 
          else if (axiosError.response.status === 422) {
-               handleValidationError(error);
+            handleValidationError(error);
          }
-         return { error: errorMessage };
+         return { error: errorMessage || 'ошибка, попробуйте ещё раз' };
       }
 
-      return { error: 'ошибка, попробуйте еще раз' };
+      return { error: 'ошибка, попробуйте ещё раз' };
    }
 };
 
 const handleAxiosError = (error: unknown) => {
    const axiosError = error as AxiosError;
 
-   if (axiosError.response) {
+   if (axiosError.response?.data) {
       const errorData = axiosError.response.data as IErrorResponse;
-      return (errorData.detail ?? errorData.description) || 'ошибка, попробуйте еще раз';
+      return (errorData.detail ?? errorData.description) || 'ошибка, попробуйте ещё раз';
    }
-   return 'ошибка, попробуйте еще раз';
+   return 'ошибка, попробуйте ещё раз';
 };
 
 const handleValidationError = (error: unknown) => {
@@ -153,10 +159,10 @@ const handleValidationError = (error: unknown) => {
 
    if (axiosError.response) {
       const errorData = axiosError.response.data as IHTTPValidationError;
-      const messages = errorData.detail.map(err => err.msg).join(', ') || errorData.detail.map(err => err.reason).join(', ') || 'ошибка, попробуйте еще раз';
+      const messages = errorData?.detail?.map(err => err?.msg)?.join(', ') || errorData?.detail?.map(err => err?.reason)?.join(', ') || 'ошибка, попробуйте ещё раз';
       return messages;
    }
-   return 'ошибка, попробуйте еще раз';
+   return 'ошибка, попробуйте ещё раз';
 }
 
 export { isUserAuthed, loginUser, logoutUser, registerUser, resetPassStep1, resetPassStep2 };
