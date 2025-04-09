@@ -75,7 +75,7 @@ const MainPage: FC = () => {
       <>
          <div className='container'>
             <Circles />
-            {radioStations &&
+            {isAuthed && radioStations &&
                <QueueList queue={radioStations} currTrack={currentTrack} onTrackChange={handleTrackChange} currentSource={currentSource} onRadioStationsUpdate={setRadioStations} handleSnackbarMsg={handleSnackbarMsg} handleSnackbarType={handleSnackbarType} />
             }
             {!isAuthed && isAuthModalOpen &&
