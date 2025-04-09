@@ -1,5 +1,10 @@
 $gray-modal-border: #4A4A4A;
 $biege-modal-bg: #e4d9b7;
+$modal-input-default-height: 50px;
+$modal-button-default-height: 40px;
+
+$modal-input-mobile-height: 45px;
+$modal-button-mobile-height: 35px;
 
 .auth-modal {
     border: 1px solid $gray-modal-border;
@@ -44,7 +49,7 @@ $biege-modal-bg: #e4d9b7;
         border-radius: 16px;
         font-size: 1.15rem;
         width: 90%;
-        height: 50px;
+        height: $modal-input-default-height;
         max-width: 300px;
         padding: 0 12.5px;
     }
@@ -56,7 +61,7 @@ $biege-modal-bg: #e4d9b7;
             background-color: #b8936f;
             border-radius: 15px;
             width: 80%;
-            height: 40px;
+            height: $modal-button-default-height;
             max-width: 225px;
             cursor: pointer;
         }
@@ -73,4 +78,25 @@ $biege-modal-bg: #e4d9b7;
             cursor: pointer;  
         }
     }
+}
+
+@media only screen and (max-width: 950px) and (orientation: landscape) {
+   .auth-modal {
+      height: min-content;
+
+      &__title {
+         font-size: 2.5rem;
+      }
+      &__input {
+         height: $modal-input-mobile-height;
+      }
+      &__button {
+         &--submit {
+            height: $modal-button-mobile-height;
+         }
+         &--switch {
+            margin-top: 5px;
+         }
+      }
+   }
 }

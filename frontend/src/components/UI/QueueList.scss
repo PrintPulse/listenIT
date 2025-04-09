@@ -95,3 +95,10 @@ $color-green-item-playing: rgba(110, 138, 104, 0.3);
       }
    }
 }
+
+@media only screen and (max-width: 950px) and (orientation: landscape) {
+   .queue-list {
+      left: auto;
+      right: 2%;
+   }
+}

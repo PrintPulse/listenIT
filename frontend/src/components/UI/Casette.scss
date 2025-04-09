@@ -1,115 +1,187 @@
-$green-button-bg: #4CAF50;
-$green-button-bg-hover: #45a049;
-$white: #DED5CA;
-$volume-control-bg: linear-gradient(135deg, #d1d1d1, #8a8a8a);
-$red-control-marker: #ff3333;
-$black-audio-button-bg: #0B0604;
+$yellow-input-bg: #F9F4D2;
+$gray-input-border: #C2C2C2;
+$gray-text: #949494;
+$red-color: #ff0000;
 
-.audio {
-   &-container {
-      position: absolute;
-      bottom: -30px;
-      z-index: 1;
+.main {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   flex-direction: column;
+   gap: 14.2303dvh;
+   position: absolute;
+   top: 8.7%;
+   left: 50%;
+   transform: translateX(-50%);
+
+   &__bottom {
+      width: 100%;
+      max-width: 640px;
+      max-height: 407px;
+      position: relative;
+      transition: box-shadow 0.5s ease;
+
+      &:hover {
+         box-shadow: 0 0 20px var(--cassette-color);
+      }
    }
-   &-controls {
+   &__inner {
       display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      background-color: inherit;
-      border-radius: 4px;
-      width: 235px;
+      justify-content: center;
+      align-items: center;
+      gap: 11px;
+      max-width: 400px;
       position: absolute;
-      bottom: -49.5px;
-      left: 48px;
+      top: 45%;
+      left: 50%;
+      transform: translateY(-50%) translateX(-50%);
+   }
+   &__title {
+      font-size: 8.25rem;
+   }
+   &__image {
+      width: 640px;
+      height: 407px;
+      filter: drop-shadow(0 0 5px var(--cassette-color));
+   }
+   &__input {
+      border: 1px solid $gray-input-border;
+      border-radius: 30px;
+      background-color: $yellow-input-bg;
+      font-size: 1.75rem;
+      padding: 0 18px 0 31px;
+      width: 59.375dvw;
+      height: 95px;
+      max-width: 190px;
 
-      &__button {
-         display: flex;
-         justify-content: center;
-         align-items: center;
-         border-radius: 50%;
-         background-color: $black-audio-button-bg;
-         border: 1px solid $white;
-         width: 50px;
-         height: 50px;
-         transition: all 0.3s ease;
-         cursor: pointer;
+      &-container {
          position: relative;
+      }
+      &:focus {
+         outline: none;
+      }
+   }
+   &__label {
+      font-size: 1.6rem;
+      color: $gray-text;
+      position: absolute;
+      top: 50%;
+      left: 31px;
+      transform: translateY(-50%);
+      transition: all 0.3s ease;
+      cursor: text;
 
-         &--play {
-            &::before {
-               content: "";
-               display: block;
-               width: 0;
-               height: 0;
-               border-top: 12px solid transparent;
-               border-bottom: 12px solid transparent;
-               border-left: 20px solid $white;
-            }
-         }
-         &--pause {
-            display: flex;
-            gap: 6px;
+      &.transparent {
+         opacity: 0.7;
+      }
+      &.invisible {
+         display: none;
+      }
+   }
+   &__reel {
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      background: url('../../images/reel.png') no-repeat center;
+      background-size: contain;
+      z-index: 1;
+      transform: translate(-50%, -50%);
 
-            &::before, &::after {
-               content: "";
-               width: 6px;
-               height: 20px;
-               background-color: $white;
-            }
-         }
+      &--left {
+         top: 140px;
+         left: 21.5%;
       }
-      &__volume-control {
-         position: relative;
-         width: 50px;
-         height: 50px;
-         border-radius: 50%;
-         background-color: $black-audio-button-bg;
-         border: 1px solid $white;
-         box-shadow: 
-            inset 0 2px 3px rgba(255, 255, 255, 0.3),
-            inset 0 -2px 3px rgba(0, 0, 0, 0.3),
-            0 4px 8px rgba(0, 0, 0, 0.3);
-         display: flex;
-         justify-content: center;
-         align-items: center;
+      &--right {
+         top: 140px;
+         right: 21.5%;
       }
-      &__volume-input {
-         position: absolute;
-         width: 100%;
-         height: 100%;
-         opacity: 0;
-         cursor: pointer;
-         z-index: 2;
+      &--left:not(.spin) {
+         top: 185px;
+         left: 28.6%;
       }
-   
-      &__marker {
-         width: 6px;
-         height: 20px;
-         background: $white;
-         border-radius: 3px;
-         position: absolute;
-         top: 5px;
-         transform-origin: center 20px;
-         transform: rotate(calc(var(--rotation, 0) * 1deg));
-         transition: transform 0.1s ease;
-         box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+      &--right:not(.spin) {
+         top: 185px;
+         right: 14.5%;
+      }
+      &.spin {
+         animation: spin 2s linear infinite;
       }
    }
 }
 
-@media (max-width: 1358px) {
-   .audio-controls {
-      width: 199px;
-      bottom: -24.5px;
-      left: 68px;
+.main--error {
+   text-align: center;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translateY(-50%) translateX(-50%);
 
-      &__button {
-         width: 45.5px;
-         height: 45.5px;
+   &__title {
+      font-size: 2.5rem;
+      color: $red-color;
+   }
+   &__link {
+      font-size: 1.5rem;
+      color: $red-color;
+   }
+}
+
+@keyframes spin {
+   from { transform: rotate(0deg); }
+   to { transform: rotate(360deg); }
+}
+
+@media (max-width: 1358px) {
+   .main {
+      left: 65%;
+
+      &__title {
+         font-size: 7rem;
       }
-      &__volume-control {
-         width: 50px;
-         height: 50px;
+      &__bottom {
+         width: 520px;
+         height: 360px;
+      }
+      &__reel {
+         width: 75px;
+         height: 75px;
+
+         &--right {
+            top: 125.5px;
+         }
+         &--right:not(.spin) {
+            top: 162.5px;
+            right: 14%;
+         }
+         &--left {
+            top: 125.5px;
+         }
+         &--left:not(.spin) {
+            top: 162.5px;
+         }
+      }
+      &__image {
+         width: 520px;
+         height: 360px;
+      }
+   }
+}
+
+@media only screen and (max-width: 950px) and (orientation: landscape) {
+   .main__title {
+      font-size: 3.5rem;
+   }
+   .main {
+      max-height: 100dvh;
+      top: 0;
+      left: 30%;
+      gap: 0;
+
+      &__title {
+         font-size: 2.5rem;
+      }
+      &__bottom {
+         transform: scale(0.8);
       }
    }
 }
