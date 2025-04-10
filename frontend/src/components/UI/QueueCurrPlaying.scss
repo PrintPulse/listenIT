@@ -59,15 +59,6 @@
      left: -89.5px;
      z-index: 1;
    }
-   &::after {
-     content: '';
-     background-color: #FCF6D2;
-     width: 40px;
-     height: 40px;
-     position: absolute;
-     top: 5px;
-     left: -98px;
-   }
 }
 
 @media (max-width: 1358px) {
@@ -85,9 +76,5 @@
       top: 10px;
       left: -45px;
       z-index: 1;
-   }
-   .queue::after {
-     top: 15px;
-     left: -50px;
    }
 }
