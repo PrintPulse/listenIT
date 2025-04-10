@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { shazamRadio } from '../../services/shazamRadioService';
-import './ShazamRadioButton.css';
+import './ShazamRadioButton.scss';
 
 interface IShazamRadioButtonProps {
    handleSnackbarMsg: (snackbarMsg: string) => void;

@@ -1,0 +1,120 @@
+$color-green-aside-bg: rgba(133, 163, 127, 0.3);
+$color-green-aside-bg-hover: rgba(133, 163, 127, 0.5);
+$color-green-item-playing: rgba(110, 138, 104, 0.3);
+
+.queue-list {
+   display: flex;
+   flex-direction: column;
+   gap: 1dvh;
+   position: absolute;
+   top: 50%;
+   left: 2%;
+   overflow-y: hidden;
+   transform: translateY(-50%);
+   max-height: 92.5dvh;
+
+   &__queue {
+      background-color: $color-green-aside-bg;
+      border: 1px solid $color-green-aside-bg;
+      border-radius: 16px;
+      padding: 15px;
+      max-width: 350px;  
+   }
+   &__liked-items {
+      background-color: $color-green-aside-bg;
+      border: 1px solid $color-green-aside-bg;
+      border-radius: 16px;
+      padding: 15px;
+      max-width: 350px;  
+   }
+   &__title {
+      font-size: 2rem;
+      font-weight: 500;
+      text-align: center;
+   }
+   &__list {
+      display: flex;
+      flex-direction: column;
+      padding: 15px 0;
+      max-height: 45dvh;
+      overflow: auto;
+      &::-webkit-scrollbar {
+         width: 8px;
+      }
+      &::-webkit-scrollbar-track {
+         background: rgba(133, 163, 127, 0.1);
+      }
+      &::-webkit-scrollbar-thumb {
+         background: rgba(133, 163, 127, 0.5);
+         border-radius: 4px;
+         
+         &:hover {
+            background: rgba(133, 163, 127, 0.7);
+         }
+      }
+
+      &-empty {
+         text-align: center;
+      }
+   }
+   &__item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      list-style-type: none;
+      column-gap: 15px;
+      row-gap: 10px;
+      padding: 0 10px;
+      cursor: pointer;
+
+      &:hover {
+         background-color: $color-green-aside-bg-hover;
+      }
+      &--liked {
+         justify-content: center;
+         gap: 15px;
+      }
+      &-name {
+         text-align: center;
+         white-space: nowrap;
+         text-overflow: ellipsis;
+         display: inline-block;
+         overflow: hidden;
+         max-width: 150px;
+      }
+      &-button {
+         border: 0;
+         background-color: inherit;
+         background: url('../../images/icon-liked.png') no-repeat center center;
+         background-size: contain;
+         width: 25px;
+         height: 25px;
+         cursor: pointer;
+
+         &--liked {
+            background: url('../../images/icon-like.png') no-repeat center center;
+            background-size: contain;
+         }
+      }
+      &--playing {
+         background-color: $color-green-item-playing;
+      }
+   }
+}
+
+@media (max-width: 926px) {
+   .queue-list {
+      max-width: 250px;
+      
+      &__title {
+         font-size: 1.375rem;
+      }
+   }
+}
+
+@media only screen and (max-width: 950px) and (orientation: landscape) {
+   .queue-list {
+      left: auto;
+      right: 2%;
+   }
+}

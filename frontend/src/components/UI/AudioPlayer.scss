@@ -41,7 +41,7 @@ $black-audio-button-bg: #0B0604;
                height: 0;
                border-top: 12px solid transparent;
                border-bottom: 12px solid transparent;
-               border-left: 20px solid v.$white;
+               border-left: 20px solid $white;
             }
          }
          &--pause {
@@ -52,7 +52,7 @@ $black-audio-button-bg: #0B0604;
                content: "";
                width: 6px;
                height: 20px;
-               background-color: v.$white;
+               background-color: $white;
             }
          }
       }
