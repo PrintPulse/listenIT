@@ -78,11 +78,7 @@ const QueueList: FC<IQueueListProps> = ({ queue, currTrack, onTrackChange, curre
             <p className="queue-list__title">Очередь радио:</p>
             <ul className='queue-list__list'>
                {queue.map((item) => (
-<<<<<<< HEAD
-                  <li key={item.id} className={'queue-list__item' + (item.source === currTrack ? ' queue-list__item--playing' : '')}>
-=======
                   <li key={item.id} onClick={() => handleRadioClick(item, false)} className={'queue-list__item' + (item.source === currTrack && currentSource === 'queue' ? ' queue-list__item--playing' : '')}>
->>>>>>> 69c271e04d0e15fd2d1aa8d21dc0357833b28163
                      <p className='queue-list__item-position'>{item.id}</p>
                      <p className='queue-list__item-name' title={item.name}>{item.name}</p>
                      <button
@@ -99,15 +95,11 @@ const QueueList: FC<IQueueListProps> = ({ queue, currTrack, onTrackChange, curre
             <ul className='queue-list__list'>
                {likedItems.length > 0 ? (
                   likedItems.map((item) => (
-<<<<<<< HEAD
-                     <li key={item.id} className='queue-list__item queue-list__item--liked'>
-=======
                      <li 
                         key={item.id} 
                         onClick={() => handleRadioClick(item, true)} 
                         className={'queue-list__item queue-list__item--liked' + (item.source === currTrack && currentSource === 'favorites' ? ' queue-list__item--playing' : '')}
                      >
->>>>>>> 69c271e04d0e15fd2d1aa8d21dc0357833b28163
                         <p className='queue-list__item-name' title={item.name}>{item.name}</p>
                         <button
                            onClick={ (e: React.MouseEvent<HTMLButtonElement>) => {e.stopPropagation(); handleLikeButton(item);} }
