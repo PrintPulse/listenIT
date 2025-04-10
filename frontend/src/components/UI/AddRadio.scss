@@ -1,0 +1,44 @@
+.add-radio {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+ 
+    &__button {
+       border: 0;
+       background-color: inherit;
+       font-size: 1.125rem;
+       transition: all .3s ease-in;
+       cursor: pointer;
+ 
+       &:hover {
+          transform: scale(1.1);
+       }
+    }
+    &__form {
+       display: flex;
+       justify-content: center;
+       flex-direction: column;
+       align-items: center;
+       width: 100%;
+       padding: 10px 0;
+       gap: 10px;
+       
+       &-button {
+          border: 1px solid rgba(133,163,127,.3);
+          border-radius: 16px;
+          background-color: rgba(133,163,127,.3);
+          width: 70%;
+          height: 22px;
+          cursor: pointer;
+       }
+    }
+    &__input {
+       border: 1px solid transparent;
+       border-radius: 16px;
+       text-align: center;
+       padding: 5px 7.5px;
+       width: 100%;
+    }
+ }
+ 

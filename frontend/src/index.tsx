@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { BackgroundProvider } from './context/BackgroundContext';
 import { AuthProvider } from './context/AuthContext';
+import { OrientationCheck } from 'components/layout/OrientationCheck';
 
 const root = ReactDOM.createRoot(
    document.getElementById('root') as HTMLElement
@@ -12,7 +13,9 @@ const root = ReactDOM.createRoot(
 root.render(
    <AuthProvider>
       <BackgroundProvider>
-         <App />
+         <OrientationCheck>
+            <App />
+         </OrientationCheck>
       </BackgroundProvider>
    </AuthProvider>
 );

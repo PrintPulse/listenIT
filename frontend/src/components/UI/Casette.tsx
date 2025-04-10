@@ -1,7 +1,7 @@
-import React, { FC, ReactNode, useState, useEffect } from 'react';
-import { IRadioItem } from '../../types';
+import React, { FC, ReactNode, useEffect, useState } from 'react';
+import audiocassette from '../../images/audiocassette-new.png';
 import { radioService } from '../../services/radioService';
-import audiocasette from '../../images/audiocasette.png';
+import { IRadioItem } from '../../types';
 import './Casette.css';
 
 interface ICasetteProps {
@@ -52,7 +52,7 @@ const Casette: FC<ICasetteProps> = ({ children, isPlaying, currentTrack, onRadio
                <h2 className="main__title">listen!</h2>
             </div>
             <div className="main__bottom" style={{ '--cassette-color': cassetteColor } as React.CSSProperties}>
-            <img src={ audiocasette } className="main__image" alt='vintage audio cassette tape' draggable={false}/>               
+            <img src={ audiocassette } className="main__image" alt='vintage audio cassette tape' draggable={false}/>               
             <div className={`main__reel main__reel--left ${isPlaying ? 'spin' : ''}`}></div>
                <div className={`main__reel main__reel--right ${isPlaying ? 'spin' : ''}`}></div>
                <div className="main__inner">

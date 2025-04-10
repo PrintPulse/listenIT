@@ -1,25 +1,27 @@
 @use '../../variables' as v;
 
 .main {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
-    gap: 14.2303dvh;
-    position: absolute;
-    top: 8.7%;
-    left: 50%;
-    transform: translateX(-50%);
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   flex-direction: column;
+   gap: 14.2303dvh;
+   position: absolute;
+   top: 8.7%;
+   left: 50%;
+   transform: translateX(-50%);
 
-    &__bottom {
-        width: 100%;
-        max-width: 640px;
-        position: relative;
-        transition: box-shadow 0.5s ease;
+   &__bottom {
+      width: 100%;
+      max-width: 640px;
+      max-height: 407px;
+      position: relative;
+      transition: box-shadow 0.5s ease;
 
-        &:hover {
+      &:hover {
          box-shadow: 0 0 20px var(--cassette-color);
       }
+<<<<<<<< HEAD:frontend/src/styles/components/UI/Casette.scss
     }
     &__inner {
         display: flex;
@@ -73,8 +75,63 @@
         &.invisible {
             display: none;
         }
+========
+   }
+   &__inner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 11px;
+      max-width: 400px;
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translateY(-50%) translateX(-50%);
+   }
+   &__title {
+      font-size: 8.25rem;
+   }
+   &__image {
+      width: 640px;
+      height: 407px;
+      filter: drop-shadow(0 0 5px var(--cassette-color));
+   }
+   &__input {
+      border: 1px solid $gray-input-border;
+      border-radius: 30px;
+      background-color: $yellow-input-bg;
+      font-size: 1.75rem;
+      padding: 0 18px 0 31px;
+      width: 59.375dvw;
+      height: 95px;
+      max-width: 190px;
+
+      &-container {
+         position: relative;
+>>>>>>>> 69c271e04d0e15fd2d1aa8d21dc0357833b28163:frontend/src/components/UI/Casette.scss
       }
-    &__reel {
+      &:focus {
+         outline: none;
+      }
+   }
+   &__label {
+      font-size: 1.6rem;
+      color: $gray-text;
+      position: absolute;
+      top: 50%;
+      left: 31px;
+      transform: translateY(-50%);
+      transition: all 0.3s ease;
+      cursor: text;
+
+      &.transparent {
+         opacity: 0.7;
+      }
+      &.invisible {
+         display: none;
+      }
+   }
+   &__reel {
       position: absolute;
       width: 90px;
       height: 90px;
@@ -102,7 +159,7 @@
       &.spin {
          animation: spin 2s linear infinite;
       }
-    }
+   }
 }
 
 .main--error {
@@ -113,12 +170,21 @@
    transform: translateY(-50%) translateX(-50%);
 
    &__title {
+<<<<<<<< HEAD:frontend/src/styles/components/UI/Casette.scss
        font-size: 2.5rem;
        color: v.$red-color;
    }
    &__link {
        font-size: 1.5rem;
        color: v.$red-color;
+========
+      font-size: 2.5rem;
+      color: $red-color;
+   }
+   &__link {
+      font-size: 1.5rem;
+      color: $red-color;
+>>>>>>>> 69c271e04d0e15fd2d1aa8d21dc0357833b28163:frontend/src/components/UI/Casette.scss
    }
 }
 
@@ -147,6 +213,7 @@
          }
          &--right:not(.spin) {
             top: 162.5px;
+            right: 14%;
          }
          &--left {
             top: 125.5px;
@@ -154,6 +221,29 @@
          &--left:not(.spin) {
             top: 162.5px;
          }
+      }
+      &__image {
+         width: 520px;
+         height: 360px;
+      }
+   }
+}
+
+@media only screen and (max-width: 950px) and (orientation: landscape) {
+   .main__title {
+      font-size: 3.5rem;
+   }
+   .main {
+      max-height: 100dvh;
+      top: 0;
+      left: 30%;
+      gap: 0;
+
+      &__title {
+         font-size: 2.5rem;
+      }
+      &__bottom {
+         transform: scale(0.8);
       }
    }
 }
